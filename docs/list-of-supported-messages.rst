@@ -32,6 +32,7 @@ This is the list of messages that are at least partially supported at this time:
 - Fare_CheckRules
 - Fare_GetFareRules
 - Fare_GetFareFamilyDescription
+- Fare_TLAGetFareRules
 - Air_MultiAvailability
 - Air_SellFromRecommendation
 - Air_FlightInfo
@@ -70,6 +71,7 @@ This is the list of messages that are at least partially supported at this time:
 - Service_IntegratedPricing
 - Service_IntegratedCatalogue
 - Service_StandaloneCatalogue
+- Service_BookPriceProduct
 - Service_BookPriceService
 - Offer_CreateOffer
 - Offer_VerifyOffer
@@ -87,6 +89,15 @@ This is the list of messages that are at least partially supported at this time:
 - SalesReports_DisplayQueryReport
 - SalesReports_DisplayDailyOrSummarizedReport
 - SalesReports_DisplayNetRemitReport
+- PAY_ListVirtualCards
+- PAY_GetVirtualCardDetails
+- PAY_GenerateVirtualCard (partially)
+- PAY_DeleteVirtualCard
+- Travel_OfferPrice
+- Travel_OrderCreate
+- Travel_OrderRetrieve
+- Travel_OrderPay
+- Travel_OrderCancel
 
 **********
 To-do list

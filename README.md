@@ -1,6 +1,6 @@
 # amadeus-ws-client: PHP client for the Amadeus GDS SOAP Web Service interface
 
-[![Latest Stable Version](https://poser.pugx.org/amabnl/amadeus-ws-client/v/stable)](https://packagist.org/packages/amabnl/amadeus-ws-client) [![Build Status](https://travis-ci.org/amabnl/amadeus-ws-client.svg?branch=master)](https://travis-ci.org/amabnl/amadeus-ws-client) [![Coverage Status](https://coveralls.io/repos/github/amabnl/amadeus-ws-client/badge.svg?branch=master)](https://coveralls.io/github/amabnl/amadeus-ws-client?branch=master) [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/amabnl/amadeus-ws-client/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/amabnl/amadeus-ws-client/?branch=master) [![Style Status - PSR-2](https://styleci.io/repos/49078536/shield?branch=master)](https://styleci.io/repos/49078536)
+[![Latest Stable Version](https://poser.pugx.org/amabnl/amadeus-ws-client/v/stable)](https://packagist.org/packages/amabnl/amadeus-ws-client) [![Code Coverage](https://scrutinizer-ci.com/g/amabnl/amadeus-ws-client/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/amabnl/amadeus-ws-client/?branch=master) [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/amabnl/amadeus-ws-client/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/amabnl/amadeus-ws-client/?branch=master) [![Style Status - PSR-2](https://styleci.io/repos/49078536/shield?branch=master)](https://styleci.io/repos/49078536)
 
 This client library provides access to the Amadeus GDS SOAP Web Service interface. 
 
@@ -25,6 +25,14 @@ This library makes it a lot easier for developers to integrate content from the 
 
 # Requirements
 
+## v2
+
+* PHP 8.1 or newer
+* SOAP, XSL and DOM extensions activated
+* A WSDL & authentication details from Amadeus _(SoapHeader 4 or SoapHeader 2)_
+
+## v1
+
 * PHP 5.4 or newer _(tested with 5.4 -> 7.3)_
 * SOAP, XSL and DOM extensions activated
 * A WSDL & authentication details from Amadeus _(SoapHeader 4 or SoapHeader 2)_
@@ -43,17 +51,11 @@ After installing, you need to require Composer's autoloader:
 require 'vendor/autoload.php';
 ```
 
-Update composer to get the client:
-
- ```bash
-composer update
- ```
-
 Once the client is installed, read the [About &amp; Get Started](docs/about-get-started.rst) page.
 
 # Release history
 
-The current release is version 1.11.0. 
+The current release is version 2.3.0.
 
 See the [Changelog](CHANGELOG.md).
 

@@ -83,7 +83,7 @@ abstract class Base implements HandlerInterface, LoggerAwareInterface
     protected $isAuthenticated = false;
 
     /**
-     * @var array[string]\SoapClient
+     * @var array<string, \SoapClient>
      */
     protected $soapClients = [];
 
@@ -212,6 +212,7 @@ abstract class Base implements HandlerInterface, LoggerAwareInterface
                 ": \n".$ex->getTraceAsString()
             );
             $this->logRequestAndResponse($messageName);
+            $this->handlePostMessage($messageName, $this->getLastResponse($messageName), $messageOptions, $result);
             $result->exception = $ex;
         } catch (\Exception $ex) {
             // We should only come here when the XSL extension is not enabled
@@ -400,6 +401,7 @@ abstract class Base implements HandlerInterface, LoggerAwareInterface
      */
     protected function initSoapClient($wsdlId)
     {
+//        d($wsdlId);
         $wsdlPath = WsdlAnalyser::$wsdlIds[$wsdlId];
 
         $client = new Client\SoapClient(

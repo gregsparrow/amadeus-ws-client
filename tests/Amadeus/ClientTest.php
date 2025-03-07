@@ -24,6 +24,8 @@ namespace Test\Amadeus;
 
 use Amadeus\Client;
 use Amadeus\Client\Params;
+use Amadeus\Client\ResponseHandler\ResponseHandlerInterface;
+use Amadeus\Client\Session\Handler\HandlerInterface;
 use Psr\Log\NullLogger;
 
 /**
@@ -60,9 +62,9 @@ class ClientTest extends BaseTestCase
     public function testCanCreateClientWithOverriddenSessionHandlerRequestCreatorAndResponseHandler()
     {
         $par = new Params([
-            'sessionHandler' => $this->getMockBuilder('Amadeus\Client\Session\Handler\HandlerInterface')->getMock(),
-            'requestCreator' => $this->getMockBuilder('Amadeus\Client\RequestCreator\RequestCreatorInterface')->getMock(),
-            'responseHandler' => $this->getMockBuilder('Amadeus\Client\ResponseHandler\ResponseHandlerInterface')->getMock()
+            'sessionHandler' => $this->createMock('Amadeus\Client\Session\Handler\HandlerInterface'),
+            'requestCreator' => $this->createMock('Amadeus\Client\RequestCreator\RequestCreatorInterface'),
+            'responseHandler' => $this->createMock('Amadeus\Client\ResponseHandler\ResponseHandlerInterface')
         ]);
 
         $client = new Client($par);
@@ -177,7 +179,7 @@ class ClientTest extends BaseTestCase
             'recordLocator' => 'ABC123'
         ]));
 
-        $mockSessionHandler = $this->getMockBuilder('Amadeus\Client\Session\Handler\HandlerInterface')->getMock();
+        $mockSessionHandler = $this->createMock('Amadeus\Client\Session\Handler\HandlerInterface');
 
         $mockSessionHandler
             ->expects($this->once())
@@ -189,7 +191,7 @@ class ClientTest extends BaseTestCase
             ->method('getMessagesAndVersions')
             ->will($this->returnValue(['PNR_Retrieve' => ['version' => "14.2", 'wsdl' => 'dc22e4ee']]));
 
-        $mockResponseHandler = $this->getMockBuilder('Amadeus\Client\ResponseHandler\ResponseHandlerInterface')->getMock();
+        $mockResponseHandler = $this->createMock('Amadeus\Client\ResponseHandler\ResponseHandlerInterface');
 
         $mockResponseHandler
             ->expects($this->once())
@@ -224,7 +226,7 @@ class ClientTest extends BaseTestCase
 
         $expectedPnrResult = new Client\Struct\Pnr\RetrieveAndDisplay('ABC123');
 
-        $mockSessionHandler = $this->getMockBuilder('Amadeus\Client\Session\Handler\HandlerInterface')->getMock();
+        $mockSessionHandler = $this->createMock('Amadeus\Client\Session\Handler\HandlerInterface');
 
         $mockSessionHandler
             ->expects($this->once())
@@ -236,7 +238,7 @@ class ClientTest extends BaseTestCase
             ->method('getMessagesAndVersions')
             ->will($this->returnValue(['PNR_RetrieveAndDisplay' => ['version' => "14.2", 'wsdl' => 'dc22e4ee']]));
 
-        $mockResponseHandler = $this->getMockBuilder('Amadeus\Client\ResponseHandler\ResponseHandlerInterface')->getMock();
+        $mockResponseHandler = $this->createMock('Amadeus\Client\ResponseHandler\ResponseHandlerInterface');
 
         $mockResponseHandler
             ->expects($this->once())
@@ -301,7 +303,7 @@ class ClientTest extends BaseTestCase
 
         $expectedPnrResult = new Client\Struct\Pnr\AddMultiElements($options);
 
-        $mockSessionHandler = $this->getMockBuilder('Amadeus\Client\Session\Handler\HandlerInterface')->getMock();
+        $mockSessionHandler = $this->createMock('Amadeus\Client\Session\Handler\HandlerInterface');
 
         $mockSessionHandler
             ->expects($this->once())
@@ -313,7 +315,7 @@ class ClientTest extends BaseTestCase
             ->method('getMessagesAndVersions')
             ->will($this->returnValue(['PNR_AddMultiElements' => ['version' => "14.2", 'wsdl' => 'dc22e4ee']]));
 
-        $mockResponseHandler = $this->getMockBuilder('Amadeus\Client\ResponseHandler\ResponseHandlerInterface')->getMock();
+        $mockResponseHandler = $this->createMock('Amadeus\Client\ResponseHandler\ResponseHandlerInterface');
 
         $mockResponseHandler
             ->expects($this->once())
@@ -338,7 +340,7 @@ class ClientTest extends BaseTestCase
 
     public function testCanDoAddMultiElementsSavePNR()
     {
-        $mockSessionHandler = $this->getMockBuilder('Amadeus\Client\Session\Handler\HandlerInterface')->getMock();
+        $mockSessionHandler = $this->createMock('Amadeus\Client\Session\Handler\HandlerInterface');
 
         $mockedSendResult = new Client\Session\Handler\SendResult();
         $mockedSendResult->responseObject = new \stdClass();
@@ -368,7 +370,7 @@ class ClientTest extends BaseTestCase
             ->method('getMessagesAndVersions')
             ->will($this->returnValue(['PNR_AddMultiElements' => ['version' => "14.2", 'wsdl' => 'dc22e4ee']]));
 
-        $mockResponseHandler = $this->getMockBuilder('Amadeus\Client\ResponseHandler\ResponseHandlerInterface')->getMock();
+        $mockResponseHandler = $this->createMock('Amadeus\Client\ResponseHandler\ResponseHandlerInterface');
 
         $mockResponseHandler
             ->expects($this->once())
@@ -393,7 +395,7 @@ class ClientTest extends BaseTestCase
 
     public function testCanDoAddMultiElementsSavePNRWithRf()
     {
-        $mockSessionHandler = $this->getMockBuilder('Amadeus\Client\Session\Handler\HandlerInterface')->getMock();
+        $mockSessionHandler = $this->createMock('Amadeus\Client\Session\Handler\HandlerInterface');
 
         $mockedSendResult = new Client\Session\Handler\SendResult();
         $mockedSendResult->responseObject = new \stdClass();
@@ -429,7 +431,7 @@ class ClientTest extends BaseTestCase
             ->method('getMessagesAndVersions')
             ->will($this->returnValue(['PNR_AddMultiElements' => ['version' => "14.2", 'wsdl' => 'dc22e4ee']]));
 
-        $mockResponseHandler = $this->getMockBuilder('Amadeus\Client\ResponseHandler\ResponseHandlerInterface')->getMock();
+        $mockResponseHandler = $this->createMock('Amadeus\Client\ResponseHandler\ResponseHandlerInterface');
 
         $mockResponseHandler
             ->expects($this->once())
@@ -454,7 +456,7 @@ class ClientTest extends BaseTestCase
 
     public function testCanDoDummyPnrCancelCall()
     {
-        $mockSessionHandler = $this->getMockBuilder('Amadeus\Client\Session\Handler\HandlerInterface')->getMock();
+        $mockSessionHandler = $this->createMock('Amadeus\Client\Session\Handler\HandlerInterface');
 
         $mockedSendResult = new Client\Session\Handler\SendResult();
         $mockedSendResult->responseObject = new \stdClass();
@@ -480,7 +482,7 @@ class ClientTest extends BaseTestCase
             ->method('getMessagesAndVersions')
             ->will($this->returnValue(['PNR_Cancel' => ['version' => "14.2", 'wsdl' => 'dc22e4ee']]));
 
-        $mockResponseHandler = $this->getMockBuilder('Amadeus\Client\ResponseHandler\ResponseHandlerInterface')->getMock();
+        $mockResponseHandler = $this->createMock('Amadeus\Client\ResponseHandler\ResponseHandlerInterface');
 
         $mockResponseHandler
             ->expects($this->once())
@@ -510,7 +512,7 @@ class ClientTest extends BaseTestCase
 
     public function testCanDoDummyPnrSplit()
     {
-        $mockSessionHandler = $this->getMockBuilder('Amadeus\Client\Session\Handler\HandlerInterface')->getMock();
+        $mockSessionHandler = $this->createMock('Amadeus\Client\Session\Handler\HandlerInterface');
 
         $mockedSendResult = new Client\Session\Handler\SendResult();
         $mockedSendResult->responseObject = new \stdClass();
@@ -533,7 +535,7 @@ class ClientTest extends BaseTestCase
             ->method('getMessagesAndVersions')
             ->will($this->returnValue(['PNR_Split' => ['version' => "14.2", 'wsdl' => 'dc22e4ee']]));
 
-        $mockResponseHandler = $this->getMockBuilder('Amadeus\Client\ResponseHandler\ResponseHandlerInterface')->getMock();
+        $mockResponseHandler = $this->createMock('Amadeus\Client\ResponseHandler\ResponseHandlerInterface');
 
         $mockResponseHandler
             ->expects($this->once())
@@ -560,7 +562,7 @@ class ClientTest extends BaseTestCase
 
     public function testCanDoDummyPnrDisplayHistoryCall()
     {
-        $mockSessionHandler = $this->getMockBuilder('Amadeus\Client\Session\Handler\HandlerInterface')->getMock();
+        $mockSessionHandler = $this->createMock('Amadeus\Client\Session\Handler\HandlerInterface');
 
         $mockedSendResult = new Client\Session\Handler\SendResult();
         $mockedSendResult->responseObject = new \stdClass();
@@ -585,7 +587,7 @@ class ClientTest extends BaseTestCase
             ->method('getMessagesAndVersions')
             ->will($this->returnValue(['PNR_DisplayHistory' => ['version' => "14.2", 'wsdl' => 'dc22e4ee']]));
 
-        $mockResponseHandler = $this->getMockBuilder('Amadeus\Client\ResponseHandler\ResponseHandlerInterface')->getMock();
+        $mockResponseHandler = $this->createMock('Amadeus\Client\ResponseHandler\ResponseHandlerInterface');
 
         $mockResponseHandler
             ->expects($this->once())
@@ -614,7 +616,7 @@ class ClientTest extends BaseTestCase
 
     public function testCanDoDummyPnrTransferOwnershipCall()
     {
-        $mockSessionHandler = $this->getMockBuilder('Amadeus\Client\Session\Handler\HandlerInterface')->getMock();
+        $mockSessionHandler = $this->createMock('Amadeus\Client\Session\Handler\HandlerInterface');
 
         $mockedSendResult = new Client\Session\Handler\SendResult();
         $mockedSendResult->responseObject = new \stdClass();
@@ -640,7 +642,7 @@ class ClientTest extends BaseTestCase
             ->method('getMessagesAndVersions')
             ->will($this->returnValue(['PNR_TransferOwnership' => ['version' => "14.2", 'wsdl' => 'dc22e4ee']]));
 
-        $mockResponseHandler = $this->getMockBuilder('Amadeus\Client\ResponseHandler\ResponseHandlerInterface')->getMock();
+        $mockResponseHandler = $this->createMock('Amadeus\Client\ResponseHandler\ResponseHandlerInterface');
 
         $mockResponseHandler
             ->expects($this->once())
@@ -668,9 +670,64 @@ class ClientTest extends BaseTestCase
         $this->assertEquals($messageResult, $response);
     }
 
+    public function testCanSendPnrChangeElement()
+    {
+        $mockSessionHandler = $this->createMock('Amadeus\Client\Session\Handler\HandlerInterface');
+
+        $mockedSendResult = new Client\Session\Handler\SendResult();
+        $mockedSendResult->responseObject = new \stdClass();
+        $mockedSendResult->responseObject->dummyProp = 'A dummy message result'; // Not an actual Soap reply.
+        $mockedSendResult->responseXml = $this->getTestFile('pnrChangeElementReply.txt');
+
+        $messageResult = new Client\Result($mockedSendResult);
+
+        $expectedOptions = new Client\Struct\Pnr\ChangeElement(
+            new Client\RequestOptions\PnrChangeElementOptions([
+                'entry' => '8/TR/01DEC',
+            ])
+        );
+
+        $mockSessionHandler
+            ->expects($this->once())
+            ->method('sendMessage')
+            ->with('PNR_ChangeElement', $expectedOptions, ['endSession' => false, 'returnXml' => true])
+            ->willReturn($mockedSendResult);
+
+        $mockSessionHandler
+            ->expects($this->once())
+            ->method('getMessagesAndVersions')
+            ->willReturn(['PNR_ChangeElement' => ['version' => '17.2', 'wsdl' => 'dc22e4ee']]);
+
+        $mockResponseHandler = $this->createMock('Amadeus\Client\ResponseHandler\ResponseHandlerInterface');
+
+        $mockResponseHandler
+            ->expects($this->once())
+            ->method('analyzeResponse')
+            ->with($mockedSendResult, 'PNR_ChangeElement')
+            ->willReturn($messageResult);
+
+        $par = new Params();
+        $par->sessionHandler = $mockSessionHandler;
+        $par->requestCreatorParams = new Params\RequestCreatorParams([
+            'receivedFrom' => 'some RF string',
+            'originatorOfficeId' => 'BRUXXXXXX'
+        ]);
+        $par->responseHandler = $mockResponseHandler;
+
+        $client = new Client($par);
+
+        $response = $client->pnrChangeElement(
+            new Client\RequestOptions\PnrChangeElementOptions([
+                'entry' => '8/TR/01DEC',
+            ])
+        );
+
+        $this->assertEquals($messageResult, $response);
+    }
+
     public function testCanSendPnrNameChange()
     {
-        $mockSessionHandler = $this->getMockBuilder('Amadeus\Client\Session\Handler\HandlerInterface')->getMock();
+        $mockSessionHandler = $this->createMock('Amadeus\Client\Session\Handler\HandlerInterface');
 
         $mockedSendResult = new Client\Session\Handler\SendResult();
         $mockedSendResult->responseObject = new \stdClass();
@@ -703,7 +760,7 @@ class ClientTest extends BaseTestCase
             ->method('getMessagesAndVersions')
             ->will($this->returnValue(['PNR_NameChange' => ['version' => "14.2", 'wsdl' => 'dc22e4ee']]));
 
-        $mockResponseHandler = $this->getMockBuilder('Amadeus\Client\ResponseHandler\ResponseHandlerInterface')->getMock();
+        $mockResponseHandler = $this->createMock('Amadeus\Client\ResponseHandler\ResponseHandlerInterface');
 
         $mockResponseHandler
             ->expects($this->once())
@@ -741,7 +798,7 @@ class ClientTest extends BaseTestCase
 
     public function testCanDoDummyQueueListCall()
     {
-        $mockSessionHandler = $this->getMockBuilder('Amadeus\Client\Session\Handler\HandlerInterface')->getMock();
+        $mockSessionHandler = $this->createMock('Amadeus\Client\Session\Handler\HandlerInterface');
 
         $lastResponse = '<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:awsse="http://xml.amadeus.com/2010/06/Session_v3" xmlns:wsa="http://www.w3.org/2005/08/addressing"><SOAP-ENV:Header><wsa:To>http://www.w3.org/2005/08/addressing/anonymous</wsa:To><wsa:From><wsa:Address>https://dummy.endpoint/ENDPOINT</wsa:Address></wsa:From><wsa:Action>http://webservices.amadeus.com/QDQLRQ_11_1_1A</wsa:Action><wsa:MessageID>urn:uuid:916bb446-a6fc-b8a4-b543-ce4b8ba124e1</wsa:MessageID><wsa:RelatesTo RelationshipType="http://www.w3.org/2005/08/addressing/reply">86653CF8-2017-2F7C-AFC2-BD07B22BD185</wsa:RelatesTo><awsse:Session TransactionStatusCode="End"><awsse:SessionId>SESSIONID</awsse:SessionId><awsse:SequenceNumber>1</awsse:SequenceNumber><awsse:SecurityToken>SECTOKEN</awsse:SecurityToken></awsse:Session></SOAP-ENV:Header><SOAP-ENV:Body><Queue_ListReply xmlns="http://xml.amadeus.com/QDQLRR_11_1_1A"><queueView><agent><originatorDetails><inHouseIdentification1>BRU1AXXXX</inHouseIdentification1></originatorDetails></agent><queueNumber><queueDetails><number>0</number></queueDetails></queueNumber><categoryDetails><subQueueInfoDetails><identificationType>C</identificationType><itemNumber>0</itemNumber></subQueueInfoDetails></categoryDetails><pnrCount><quantityDetails><numberOfUnit>1</numberOfUnit></quantityDetails></pnrCount><pnrCount><quantityDetails><numberOfUnit>1</numberOfUnit></quantityDetails></pnrCount><pnrCount><quantityDetails><numberOfUnit>1</numberOfUnit></quantityDetails></pnrCount><item><paxName><paxDetails><surname>TURBO</surname><type>0</type><quantity>0</quantity></paxDetails></paxName><recLoc><reservation><controlNumber>23TCZS</controlNumber></reservation></recLoc><agent><originatorDetails><inHouseIdentification1>BRU1AXXXX</inHouseIdentification1><inHouseIdentification2>WS</inHouseIdentification2></originatorDetails></agent><pnrdates><timeMode>700</timeMode><dateTime><year>2015</year><month>12</month><day>11</day></dateTime></pnrdates><pnrdates><timeMode>701</timeMode><dateTime><year>2016</year><month>1</month><day>5</day></dateTime></pnrdates><pnrdates><timeMode>711</timeMode><dateTime><year>2015</year><month>12</month><day>11</day><hour>12</hour><minutes>28</minutes></dateTime></pnrdates></item></queueView></Queue_ListReply></SOAP-ENV:Body></SOAP-ENV:Envelope>';
         $messageResult = '<Queue_ListReply xmlns="http://xml.amadeus.com/QDQLRR_11_1_1A"><queueView><agent><originatorDetails><inHouseIdentification1>BRU1AXXXX</inHouseIdentification1></originatorDetails></agent><queueNumber><queueDetails><number>0</number></queueDetails></queueNumber><categoryDetails><subQueueInfoDetails><identificationType>C</identificationType><itemNumber>0</itemNumber></subQueueInfoDetails></categoryDetails><pnrCount><quantityDetails><numberOfUnit>1</numberOfUnit></quantityDetails></pnrCount><pnrCount><quantityDetails><numberOfUnit>1</numberOfUnit></quantityDetails></pnrCount><pnrCount><quantityDetails><numberOfUnit>1</numberOfUnit></quantityDetails></pnrCount><item><paxName><paxDetails><surname>TURBO</surname><type>0</type><quantity>0</quantity></paxDetails></paxName><recLoc><reservation><controlNumber>23TCZS</controlNumber></reservation></recLoc><agent><originatorDetails><inHouseIdentification1>BRU1AXXXX</inHouseIdentification1><inHouseIdentification2>WS</inHouseIdentification2></originatorDetails></agent><pnrdates><timeMode>700</timeMode><dateTime><year>2015</year><month>12</month><day>11</day></dateTime></pnrdates><pnrdates><timeMode>701</timeMode><dateTime><year>2016</year><month>1</month><day>5</day></dateTime></pnrdates><pnrdates><timeMode>711</timeMode><dateTime><year>2015</year><month>12</month><day>11</day><hour>12</hour><minutes>28</minutes></dateTime></pnrdates></item></queueView></Queue_ListReply>';
@@ -774,7 +831,7 @@ class ClientTest extends BaseTestCase
             ->method('getMessagesAndVersions')
             ->will($this->returnValue(['Queue_List' => ['version' => "11.1", 'wsdl' => 'dc22e4ee']]));
 
-        $mockResponseHandler = $this->getMockBuilder('Amadeus\Client\ResponseHandler\ResponseHandlerInterface')->getMock();
+        $mockResponseHandler = $this->createMock('Amadeus\Client\ResponseHandler\ResponseHandlerInterface');
 
         $mockResponseHandler
             ->expects($this->once())
@@ -807,7 +864,7 @@ class ClientTest extends BaseTestCase
 
     public function testCanDoPlacePNRCall()
     {
-        $mockSessionHandler = $this->getMockBuilder('Amadeus\Client\Session\Handler\HandlerInterface')->getMock();
+        $mockSessionHandler = $this->createMock('Amadeus\Client\Session\Handler\HandlerInterface');
 
         $mockedSendResult = new Client\Session\Handler\SendResult();
         $mockedSendResult->responseXml = 'dumyplacepnrmessage';
@@ -836,7 +893,7 @@ class ClientTest extends BaseTestCase
             ->method('getMessagesAndVersions')
             ->will($this->returnValue(['Queue_PlacePNR' => ['version' => "11.1", 'wsdl' => 'dc22e4ee']]));
 
-        $mockResponseHandler = $this->getMockBuilder('Amadeus\Client\ResponseHandler\ResponseHandlerInterface')->getMock();
+        $mockResponseHandler = $this->createMock('Amadeus\Client\ResponseHandler\ResponseHandlerInterface');
 
         $mockResponseHandler
             ->expects($this->once())
@@ -867,7 +924,7 @@ class ClientTest extends BaseTestCase
 
     public function testCanDoQueueRemoveItemCall()
     {
-        $mockSessionHandler = $this->getMockBuilder('Amadeus\Client\Session\Handler\HandlerInterface')->getMock();
+        $mockSessionHandler = $this->createMock('Amadeus\Client\Session\Handler\HandlerInterface');
 
         $mockedSendResult = new Client\Session\Handler\SendResult();
         $mockedSendResult->responseXml = 'dumyremoveitemmessage';
@@ -889,7 +946,7 @@ class ClientTest extends BaseTestCase
             ->method('getMessagesAndVersions')
             ->will($this->returnValue(['Queue_RemoveItem' => ['version' => "11.1", 'wsdl' => 'dc22e4ee']]));
 
-        $mockResponseHandler = $this->getMockBuilder('Amadeus\Client\ResponseHandler\ResponseHandlerInterface')->getMock();
+        $mockResponseHandler = $this->createMock('Amadeus\Client\ResponseHandler\ResponseHandlerInterface');
 
         $mockResponseHandler
             ->expects($this->once())
@@ -920,7 +977,7 @@ class ClientTest extends BaseTestCase
 
     public function testCanDoQueueMoveItemCall()
     {
-        $mockSessionHandler = $this->getMockBuilder('Amadeus\Client\Session\Handler\HandlerInterface')->getMock();
+        $mockSessionHandler = $this->createMock('Amadeus\Client\Session\Handler\HandlerInterface');
 
         $mockedSendResult = new Client\Session\Handler\SendResult();
         $mockedSendResult->responseXml = 'dummymoveitemmessage';
@@ -942,7 +999,7 @@ class ClientTest extends BaseTestCase
             ->method('getMessagesAndVersions')
             ->will($this->returnValue(['Queue_MoveItem' => ['version' => "11.1", 'wsdl' => 'dc22e4ee']]));
 
-        $mockResponseHandler = $this->getMockBuilder('Amadeus\Client\ResponseHandler\ResponseHandlerInterface')->getMock();
+        $mockResponseHandler = $this->createMock('Amadeus\Client\ResponseHandler\ResponseHandlerInterface');
 
         $mockResponseHandler
             ->expects($this->once())
@@ -983,7 +1040,7 @@ class ClientTest extends BaseTestCase
 
         $expectedMessageResult = new Client\Struct\Command\Cryptic('DAC BRU');
 
-        $mockSessionHandler = $this->getMockBuilder('Amadeus\Client\Session\Handler\HandlerInterface')->getMock();
+        $mockSessionHandler = $this->createMock('Amadeus\Client\Session\Handler\HandlerInterface');
 
         $mockSessionHandler
             ->expects($this->once())
@@ -998,7 +1055,7 @@ class ClientTest extends BaseTestCase
             ->method('getMessagesAndVersions')
             ->will($this->returnValue(['Command_Cryptic' => ['version' => "5.1", 'wsdl' => 'dc22e4ee']]));
 
-        $mockResponseHandler = $this->getMockBuilder('Amadeus\Client\ResponseHandler\ResponseHandlerInterface')->getMock();
+        $mockResponseHandler = $this->createMock('Amadeus\Client\ResponseHandler\ResponseHandlerInterface');
 
         $mockResponseHandler
             ->expects($this->once())
@@ -1045,7 +1102,7 @@ class ClientTest extends BaseTestCase
             )
         );
 
-        $mockSessionHandler = $this->getMockBuilder('Amadeus\Client\Session\Handler\HandlerInterface')->getMock();
+        $mockSessionHandler = $this->createMock('Amadeus\Client\Session\Handler\HandlerInterface');
 
         $mockSessionHandler
             ->expects($this->once())
@@ -1060,7 +1117,7 @@ class ClientTest extends BaseTestCase
             ->method('getMessagesAndVersions')
             ->will($this->returnValue(['MiniRule_GetFromRec' => ['version' => "18.1", 'wsdl' => 'dc22e4ee']]));
 
-        $mockResponseHandler = $this->getMockBuilder('Amadeus\Client\ResponseHandler\ResponseHandlerInterface')->getMock();
+        $mockResponseHandler = $this->createMock('Amadeus\Client\ResponseHandler\ResponseHandlerInterface');
 
         $mockResponseHandler
             ->expects($this->once())
@@ -1114,7 +1171,7 @@ class ClientTest extends BaseTestCase
             )
         );
 
-        $mockSessionHandler = $this->getMockBuilder('Amadeus\Client\Session\Handler\HandlerInterface')->getMock();
+        $mockSessionHandler = $this->createMock('Amadeus\Client\Session\Handler\HandlerInterface');
 
         $mockSessionHandler
             ->expects($this->once())
@@ -1129,7 +1186,7 @@ class ClientTest extends BaseTestCase
             ->method('getMessagesAndVersions')
             ->will($this->returnValue(['MiniRule_GetFromPricingRec' => ['version' => "11.1", 'wsdl' => 'dc22e4ee']]));
 
-        $mockResponseHandler = $this->getMockBuilder('Amadeus\Client\ResponseHandler\ResponseHandlerInterface')->getMock();
+        $mockResponseHandler = $this->createMock('Amadeus\Client\ResponseHandler\ResponseHandlerInterface');
 
         $mockResponseHandler
             ->expects($this->once())
@@ -1176,7 +1233,7 @@ class ClientTest extends BaseTestCase
             ])
         );
 
-        $mockSessionHandler = $this->getMockBuilder('Amadeus\Client\Session\Handler\HandlerInterface')->getMock();
+        $mockSessionHandler = $this->createMock('Amadeus\Client\Session\Handler\HandlerInterface');
 
         $mockSessionHandler
             ->expects($this->once())
@@ -1191,7 +1248,7 @@ class ClientTest extends BaseTestCase
             ->method('getMessagesAndVersions')
             ->will($this->returnValue(['MiniRule_GetFromPricing' => ['version' => "11.1", 'wsdl' => 'dc22e4ee']]));
 
-        $mockResponseHandler = $this->getMockBuilder('Amadeus\Client\ResponseHandler\ResponseHandlerInterface')->getMock();
+        $mockResponseHandler = $this->createMock('Amadeus\Client\ResponseHandler\ResponseHandlerInterface');
 
         $mockResponseHandler
             ->expects($this->once())
@@ -1233,7 +1290,7 @@ class ClientTest extends BaseTestCase
             ])
         );
 
-        $mockSessionHandler = $this->getMockBuilder('Amadeus\Client\Session\Handler\HandlerInterface')->getMock();
+        $mockSessionHandler = $this->createMock('Amadeus\Client\Session\Handler\HandlerInterface');
 
         $mockSessionHandler
             ->expects($this->once())
@@ -1248,7 +1305,7 @@ class ClientTest extends BaseTestCase
             ->method('getMessagesAndVersions')
             ->will($this->returnValue(['MiniRule_GetFromETicket' => ['version' => "13.1", 'wsdl' => 'dc22e4ee']]));
 
-        $mockResponseHandler = $this->getMockBuilder('Amadeus\Client\ResponseHandler\ResponseHandlerInterface')->getMock();
+        $mockResponseHandler = $this->createMock('Amadeus\Client\ResponseHandler\ResponseHandlerInterface');
 
         $mockResponseHandler
             ->expects($this->once())
@@ -1278,7 +1335,7 @@ class ClientTest extends BaseTestCase
 
     public function testCanDoOfferCreateCall()
     {
-        $mockSessionHandler = $this->getMockBuilder('Amadeus\Client\Session\Handler\HandlerInterface')->getMock();
+        $mockSessionHandler = $this->createMock('Amadeus\Client\Session\Handler\HandlerInterface');
 
         $mockedSendResult = new Client\Session\Handler\SendResult();
         $mockedSendResult->responseXml = $this->getTestFile('offerCreateOfferReply132.txt');
@@ -1314,7 +1371,7 @@ class ClientTest extends BaseTestCase
             ->method('getMessagesAndVersions')
             ->will($this->returnValue(['Offer_CreateOffer' => ['version' => "13.2", 'wsdl' => 'dc22e4ee']]));
 
-        $mockResponseHandler = $this->getMockBuilder('Amadeus\Client\ResponseHandler\ResponseHandlerInterface')->getMock();
+        $mockResponseHandler = $this->createMock('Amadeus\Client\ResponseHandler\ResponseHandlerInterface');
 
         $mockResponseHandler
             ->expects($this->once())
@@ -1353,7 +1410,7 @@ class ClientTest extends BaseTestCase
 
     public function testCanDoOfferVerifyCall()
     {
-        $mockSessionHandler = $this->getMockBuilder('Amadeus\Client\Session\Handler\HandlerInterface')->getMock();
+        $mockSessionHandler = $this->createMock('Amadeus\Client\Session\Handler\HandlerInterface');
 
         $mockedSendResult = new Client\Session\Handler\SendResult();
         $mockedSendResult->responseXml = 'dummyofferverifymessage';
@@ -1378,7 +1435,7 @@ class ClientTest extends BaseTestCase
             ->method('getMessagesAndVersions')
             ->will($this->returnValue(['Offer_VerifyOffer' => ['version' => "11.1", 'wsdl' => 'dc22e4ee']]));
 
-        $mockResponseHandler = $this->getMockBuilder('Amadeus\Client\ResponseHandler\ResponseHandlerInterface')->getMock();
+        $mockResponseHandler = $this->createMock('Amadeus\Client\ResponseHandler\ResponseHandlerInterface');
 
         $mockResponseHandler
             ->expects($this->once())
@@ -1408,7 +1465,7 @@ class ClientTest extends BaseTestCase
 
     public function testCanDoOfferConfirmHotelOffer()
     {
-        $mockSessionHandler = $this->getMockBuilder('Amadeus\Client\Session\Handler\HandlerInterface')->getMock();
+        $mockSessionHandler = $this->createMock('Amadeus\Client\Session\Handler\HandlerInterface');
 
         $mockedSendResult = new Client\Session\Handler\SendResult();
         $mockedSendResult->responseXml = 'dummyofferconfirmhotelmessage';
@@ -1433,7 +1490,7 @@ class ClientTest extends BaseTestCase
             ->method('getMessagesAndVersions')
             ->will($this->returnValue(['Offer_ConfirmHotelOffer' => ['version' => "11.1", 'wsdl' => 'dc22e4ee']]));
 
-        $mockResponseHandler = $this->getMockBuilder('Amadeus\Client\ResponseHandler\ResponseHandlerInterface')->getMock();
+        $mockResponseHandler = $this->createMock('Amadeus\Client\ResponseHandler\ResponseHandlerInterface');
 
         $mockResponseHandler
             ->expects($this->once())
@@ -1461,7 +1518,7 @@ class ClientTest extends BaseTestCase
 
     public function testCanDoOfferConfirmCarOffer()
     {
-        $mockSessionHandler = $this->getMockBuilder('Amadeus\Client\Session\Handler\HandlerInterface')->getMock();
+        $mockSessionHandler = $this->createMock('Amadeus\Client\Session\Handler\HandlerInterface');
 
         $mockedSendResult = new Client\Session\Handler\SendResult();
         $mockedSendResult->responseXml = 'dummyofferconfirmcarmessage';
@@ -1488,7 +1545,7 @@ class ClientTest extends BaseTestCase
             ->method('getMessagesAndVersions')
             ->will($this->returnValue(['Offer_ConfirmCarOffer' => ['version' => "11.1", 'wsdl' => 'dc22e4ee']]));
 
-        $mockResponseHandler = $this->getMockBuilder('Amadeus\Client\ResponseHandler\ResponseHandlerInterface')->getMock();
+        $mockResponseHandler = $this->createMock('Amadeus\Client\ResponseHandler\ResponseHandlerInterface');
 
         $mockResponseHandler
             ->expects($this->once())
@@ -1529,7 +1586,7 @@ class ClientTest extends BaseTestCase
             ])
         );
 
-        $mockSessionHandler = $this->getMockBuilder('Amadeus\Client\Session\Handler\HandlerInterface')->getMock();
+        $mockSessionHandler = $this->createMock('Amadeus\Client\Session\Handler\HandlerInterface');
 
         $mockSessionHandler
             ->expects($this->once())
@@ -1544,7 +1601,7 @@ class ClientTest extends BaseTestCase
             ->method('getMessagesAndVersions')
             ->will($this->returnValue(['Info_EncodeDecodeCity' => ['version' => "05.1", 'wsdl' => 'dc22e4ee']]));
 
-        $mockResponseHandler = $this->getMockBuilder('Amadeus\Client\ResponseHandler\ResponseHandlerInterface')->getMock();
+        $mockResponseHandler = $this->createMock('Amadeus\Client\ResponseHandler\ResponseHandlerInterface');
 
         $mockResponseHandler
             ->expects($this->once())
@@ -1587,7 +1644,7 @@ class ClientTest extends BaseTestCase
             ])
         );
 
-        $mockSessionHandler = $this->getMockBuilder('Amadeus\Client\Session\Handler\HandlerInterface')->getMock();
+        $mockSessionHandler = $this->createMock('Amadeus\Client\Session\Handler\HandlerInterface');
 
         $mockSessionHandler
             ->expects($this->once())
@@ -1602,7 +1659,7 @@ class ClientTest extends BaseTestCase
             ->method('getMessagesAndVersions')
             ->will($this->returnValue(['PointOfRef_Search' => ['version' => "02.1", 'wsdl' => 'dc22e4ee']]));
 
-        $mockResponseHandler = $this->getMockBuilder('Amadeus\Client\ResponseHandler\ResponseHandlerInterface')->getMock();
+        $mockResponseHandler = $this->createMock('Amadeus\Client\ResponseHandler\ResponseHandlerInterface');
 
         $mockResponseHandler
             ->expects($this->once())
@@ -1635,7 +1692,7 @@ class ClientTest extends BaseTestCase
 
     public function testCanDoTicketCreateTSTFromPricing()
     {
-        $mockSessionHandler = $this->getMockBuilder('Amadeus\Client\Session\Handler\HandlerInterface')->getMock();
+        $mockSessionHandler = $this->createMock('Amadeus\Client\Session\Handler\HandlerInterface');
 
         $mockedSendResult = new Client\Session\Handler\SendResult();
         $mockedSendResult->responseXml = 'dummyTicketCreateTSTFromPricingmessage';
@@ -1665,7 +1722,7 @@ class ClientTest extends BaseTestCase
             ->method('getMessagesAndVersions')
             ->will($this->returnValue(['Ticket_CreateTSTFromPricing' => ['version' => "04.1", 'wsdl' => 'dc22e4ee']]));
 
-        $mockResponseHandler = $this->getMockBuilder('Amadeus\Client\ResponseHandler\ResponseHandlerInterface')->getMock();
+        $mockResponseHandler = $this->createMock('Amadeus\Client\ResponseHandler\ResponseHandlerInterface');
 
         $mockResponseHandler
             ->expects($this->once())
@@ -1698,7 +1755,7 @@ class ClientTest extends BaseTestCase
 
     public function testCanDoTicketCreateTSMFromPricing()
     {
-        $mockSessionHandler = $this->getMockBuilder('Amadeus\Client\Session\Handler\HandlerInterface')->getMock();
+        $mockSessionHandler = $this->createMock('Amadeus\Client\Session\Handler\HandlerInterface');
 
         $mockedSendResult = new Client\Session\Handler\SendResult();
         $mockedSendResult->responseXml = 'dummyTicketCreateTSMFromPricingmessage';
@@ -1728,7 +1785,7 @@ class ClientTest extends BaseTestCase
             ->method('getMessagesAndVersions')
             ->will($this->returnValue(['Ticket_CreateTSMFromPricing' => ['version' => "09.1", 'wsdl' => 'dc22e4ee']]));
 
-        $mockResponseHandler = $this->getMockBuilder('Amadeus\Client\ResponseHandler\ResponseHandlerInterface')->getMock();
+        $mockResponseHandler = $this->createMock('Amadeus\Client\ResponseHandler\ResponseHandlerInterface');
 
         $mockResponseHandler
             ->expects($this->once())
@@ -1761,7 +1818,7 @@ class ClientTest extends BaseTestCase
 
     public function testCanDoTicketCreateTSMFareElement()
     {
-        $mockSessionHandler = $this->getMockBuilder('Amadeus\Client\Session\Handler\HandlerInterface')->getMock();
+        $mockSessionHandler = $this->createMock('Amadeus\Client\Session\Handler\HandlerInterface');
 
         $mockedSendResult = new Client\Session\Handler\SendResult();
         $mockedSendResult->responseXml = 'dummyTicketCreateTSMFareElementmessage';
@@ -1789,7 +1846,7 @@ class ClientTest extends BaseTestCase
             ->method('getMessagesAndVersions')
             ->will($this->returnValue(['Ticket_CreateTSMFareElement' => ['version' => "10.1", 'wsdl' => 'dc22e4ee']]));
 
-        $mockResponseHandler = $this->getMockBuilder('Amadeus\Client\ResponseHandler\ResponseHandlerInterface')->getMock();
+        $mockResponseHandler = $this->createMock('Amadeus\Client\ResponseHandler\ResponseHandlerInterface');
 
         $mockResponseHandler
             ->expects($this->once())
@@ -1820,7 +1877,7 @@ class ClientTest extends BaseTestCase
 
     public function testCanDoTicketDeleteTST()
     {
-        $mockSessionHandler = $this->getMockBuilder('Amadeus\Client\Session\Handler\HandlerInterface')->getMock();
+        $mockSessionHandler = $this->createMock('Amadeus\Client\Session\Handler\HandlerInterface');
 
         $mockedSendResult = new Client\Session\Handler\SendResult();
         $mockedSendResult->responseXml = 'dummyTicketDeleteTSTmessage';
@@ -1847,7 +1904,7 @@ class ClientTest extends BaseTestCase
             ->method('getMessagesAndVersions')
             ->will($this->returnValue(['Ticket_DeleteTST' => ['version' => "04.1", 'wsdl' => 'dc22e4ee']]));
 
-        $mockResponseHandler = $this->getMockBuilder('Amadeus\Client\ResponseHandler\ResponseHandlerInterface')->getMock();
+        $mockResponseHandler = $this->createMock('Amadeus\Client\ResponseHandler\ResponseHandlerInterface');
 
         $mockResponseHandler
             ->expects($this->once())
@@ -1877,7 +1934,7 @@ class ClientTest extends BaseTestCase
 
     public function testCanDoTicketDeleteTSMP()
     {
-        $mockSessionHandler = $this->getMockBuilder('Amadeus\Client\Session\Handler\HandlerInterface')->getMock();
+        $mockSessionHandler = $this->createMock('Amadeus\Client\Session\Handler\HandlerInterface');
 
         $mockedSendResult = new Client\Session\Handler\SendResult();
         $mockedSendResult->responseXml = $this->getTestFile('ticketDeleteTsmpReply81.txt');
@@ -1903,7 +1960,7 @@ class ClientTest extends BaseTestCase
             ->method('getMessagesAndVersions')
             ->will($this->returnValue(['Ticket_DeleteTSMP' => ['version' => "08.1", 'wsdl' => 'dc22e4ee']]));
 
-        $mockResponseHandler = $this->getMockBuilder('Amadeus\Client\ResponseHandler\ResponseHandlerInterface')->getMock();
+        $mockResponseHandler = $this->createMock('Amadeus\Client\ResponseHandler\ResponseHandlerInterface');
 
         $mockResponseHandler
             ->expects($this->once())
@@ -1932,7 +1989,7 @@ class ClientTest extends BaseTestCase
 
     public function testCanDoTicketDisplayTST()
     {
-        $mockSessionHandler = $this->getMockBuilder('Amadeus\Client\Session\Handler\HandlerInterface')->getMock();
+        $mockSessionHandler = $this->createMock('Amadeus\Client\Session\Handler\HandlerInterface');
 
         $mockedSendResult = new Client\Session\Handler\SendResult();
         $mockedSendResult->responseXml = 'dummyTicketDisplayTSTmessage';
@@ -1958,7 +2015,7 @@ class ClientTest extends BaseTestCase
             ->method('getMessagesAndVersions')
             ->will($this->returnValue(['Ticket_DisplayTST' => ['version' => "04.1", 'wsdl' => 'dc22e4ee']]));
 
-        $mockResponseHandler = $this->getMockBuilder('Amadeus\Client\ResponseHandler\ResponseHandlerInterface')->getMock();
+        $mockResponseHandler = $this->createMock('Amadeus\Client\ResponseHandler\ResponseHandlerInterface');
 
         $mockResponseHandler
             ->expects($this->once())
@@ -1987,7 +2044,7 @@ class ClientTest extends BaseTestCase
 
     public function testCanDoTicketDisplayTSMP()
     {
-        $mockSessionHandler = $this->getMockBuilder('Amadeus\Client\Session\Handler\HandlerInterface')->getMock();
+        $mockSessionHandler = $this->createMock('Amadeus\Client\Session\Handler\HandlerInterface');
 
         $mockedSendResult = new Client\Session\Handler\SendResult();
         $mockedSendResult->responseXml = 'dummyTicketDisplayTSMPmessage';
@@ -2013,7 +2070,7 @@ class ClientTest extends BaseTestCase
             ->method('getMessagesAndVersions')
             ->will($this->returnValue(['Ticket_DisplayTSMP' => ['version' => "13.2", 'wsdl' => 'dc22e4ee']]));
 
-        $mockResponseHandler = $this->getMockBuilder('Amadeus\Client\ResponseHandler\ResponseHandlerInterface')->getMock();
+        $mockResponseHandler = $this->createMock('Amadeus\Client\ResponseHandler\ResponseHandlerInterface');
 
         $mockResponseHandler
             ->expects($this->once())
@@ -2042,7 +2099,7 @@ class ClientTest extends BaseTestCase
 
     public function testCanDoTicketRetrieveListOfTSM()
     {
-        $mockSessionHandler = $this->getMockBuilder('Amadeus\Client\Session\Handler\HandlerInterface')->getMock();
+        $mockSessionHandler = $this->createMock('Amadeus\Client\Session\Handler\HandlerInterface');
 
         $mockedSendResult = new Client\Session\Handler\SendResult();
         $mockedSendResult->responseXml = 'dummyTicketRetrieveListOfTSMmessage';
@@ -2068,7 +2125,7 @@ class ClientTest extends BaseTestCase
             ->method('getMessagesAndVersions')
             ->will($this->returnValue(['Ticket_RetrieveListOfTSM' => ['version' => "13.2", 'wsdl' => 'dc22e4ee']]));
 
-        $mockResponseHandler = $this->getMockBuilder('Amadeus\Client\ResponseHandler\ResponseHandlerInterface')->getMock();
+        $mockResponseHandler = $this->createMock('Amadeus\Client\ResponseHandler\ResponseHandlerInterface');
 
         $mockResponseHandler
             ->expects($this->once())
@@ -2095,7 +2152,7 @@ class ClientTest extends BaseTestCase
 
     public function testCanDoTicketDisplayTSMFareElement()
     {
-        $mockSessionHandler = $this->getMockBuilder('Amadeus\Client\Session\Handler\HandlerInterface')->getMock();
+        $mockSessionHandler = $this->createMock('Amadeus\Client\Session\Handler\HandlerInterface');
 
         $mockedSendResult = new Client\Session\Handler\SendResult();
         $mockedSendResult->responseXml = 'dummyTicketDisplayTSMFareElementmessage';
@@ -2121,7 +2178,7 @@ class ClientTest extends BaseTestCase
             ->method('getMessagesAndVersions')
             ->will($this->returnValue(['Ticket_DisplayTSMFareElement' => ['version' => "13.1", 'wsdl' => 'dc22e4ee']]));
 
-        $mockResponseHandler = $this->getMockBuilder('Amadeus\Client\ResponseHandler\ResponseHandlerInterface')->getMock();
+        $mockResponseHandler = $this->createMock('Amadeus\Client\ResponseHandler\ResponseHandlerInterface');
 
         $mockResponseHandler
             ->expects($this->once())
@@ -2151,7 +2208,7 @@ class ClientTest extends BaseTestCase
 
     public function testCanDoTicketCheckEligibility()
     {
-        $mockSessionHandler = $this->getMockBuilder('Amadeus\Client\Session\Handler\HandlerInterface')->getMock();
+        $mockSessionHandler = $this->createMock('Amadeus\Client\Session\Handler\HandlerInterface');
 
         $mockedSendResult = new Client\Session\Handler\SendResult();
         $mockedSendResult->responseXml = 'dummyTicketCheckEligibilitymessage';
@@ -2189,7 +2246,7 @@ class ClientTest extends BaseTestCase
             ->method('getMessagesAndVersions')
             ->will($this->returnValue(['Ticket_CheckEligibility' => ['version' => "15.2", 'wsdl' => 'dc22e4ee']]));
 
-        $mockResponseHandler = $this->getMockBuilder('Amadeus\Client\ResponseHandler\ResponseHandlerInterface')->getMock();
+        $mockResponseHandler = $this->createMock('Amadeus\Client\ResponseHandler\ResponseHandlerInterface');
 
         $mockResponseHandler
             ->expects($this->once())
@@ -2230,7 +2287,7 @@ class ClientTest extends BaseTestCase
 
     public function testCanDoTicketCreateTASF()
     {
-        $mockSessionHandler = $this->getMockBuilder('Amadeus\Client\Session\Handler\HandlerInterface')->getMock();
+        $mockSessionHandler = $this->createMock('Amadeus\Client\Session\Handler\HandlerInterface');
 
         $mockedSendResult = new Client\Session\Handler\SendResult();
         $mockedSendResult->responseXml = 'dummyTicketCreateTASFmessage';
@@ -2263,7 +2320,7 @@ class ClientTest extends BaseTestCase
             ->method('getMessagesAndVersions')
             ->will($this->returnValue(['Ticket_CreateTASF' => ['version' => "12.1", 'wsdl' => 'dc22e4ee']]));
 
-        $mockResponseHandler = $this->getMockBuilder('Amadeus\Client\ResponseHandler\ResponseHandlerInterface')->getMock();
+        $mockResponseHandler = $this->createMock('Amadeus\Client\ResponseHandler\ResponseHandlerInterface');
 
         $mockResponseHandler
             ->expects($this->once())
@@ -2299,7 +2356,7 @@ class ClientTest extends BaseTestCase
 
     public function testCanDoTicketAtcShopperMasterPricerTravelBoardSearch()
     {
-        $mockSessionHandler = $this->getMockBuilder('Amadeus\Client\Session\Handler\HandlerInterface')->getMock();
+        $mockSessionHandler = $this->createMock('Amadeus\Client\Session\Handler\HandlerInterface');
 
         $mockedSendResult = new Client\Session\Handler\SendResult();
         $mockedSendResult->responseXml = 'dummyTicketAtcShopperMasterPricerTravelBoardSearchMessage';
@@ -2329,7 +2386,7 @@ class ClientTest extends BaseTestCase
             ->method('getMessagesAndVersions')
             ->will($this->returnValue(['Ticket_ATCShopperMasterPricerTravelBoardSearch' => ['version' => "13.1", 'wsdl' => 'dc22e4ee']]));
 
-        $mockResponseHandler = $this->getMockBuilder('Amadeus\Client\ResponseHandler\ResponseHandlerInterface')->getMock();
+        $mockResponseHandler = $this->createMock('Amadeus\Client\ResponseHandler\ResponseHandlerInterface');
 
         $mockResponseHandler
             ->expects($this->once())
@@ -2358,7 +2415,7 @@ class ClientTest extends BaseTestCase
 
     public function testCanDoTicketAtcShopperMasterPricerCalendar()
     {
-        $mockSessionHandler = $this->getMockBuilder('Amadeus\Client\Session\Handler\HandlerInterface')->getMock();
+        $mockSessionHandler = $this->createMock('Amadeus\Client\Session\Handler\HandlerInterface');
 
         $mockedSendResult = new Client\Session\Handler\SendResult();
         $mockedSendResult->responseXml = 'dummyTicketAtcShopperMasterPricerCalendarMessage';
@@ -2392,7 +2449,7 @@ class ClientTest extends BaseTestCase
                 'Ticket_ATCShopperMasterPricerCalendar' => ['version' => '18.2', 'wsdl' => 'dc22e4ee']
             ]);
 
-        $mockResponseHandler = $this->getMockBuilder('Amadeus\Client\ResponseHandler\ResponseHandlerInterface')->getMock();
+        $mockResponseHandler = $this->createMock('Amadeus\Client\ResponseHandler\ResponseHandlerInterface');
 
         $mockResponseHandler
             ->expects($this->once())
@@ -2421,7 +2478,7 @@ class ClientTest extends BaseTestCase
 
     public function testCanDoTicketRepricePNRWithBookingClass()
     {
-        $mockSessionHandler = $this->getMockBuilder('Amadeus\Client\Session\Handler\HandlerInterface')->getMock();
+        $mockSessionHandler = $this->createMock('Amadeus\Client\Session\Handler\HandlerInterface');
 
         $mockedSendResult = new Client\Session\Handler\SendResult();
         $mockedSendResult->responseXml = 'dummyTicketRepricePNRWithBookingClassMessage';
@@ -2484,7 +2541,7 @@ class ClientTest extends BaseTestCase
             ->method('getMessagesAndVersions')
             ->will($this->returnValue(['Ticket_RepricePNRWithBookingClass' => ['version' => "14.3", 'wsdl' => 'dc22e4ee']]));
 
-        $mockResponseHandler = $this->getMockBuilder('Amadeus\Client\ResponseHandler\ResponseHandlerInterface')->getMock();
+        $mockResponseHandler = $this->createMock('Amadeus\Client\ResponseHandler\ResponseHandlerInterface');
 
         $mockResponseHandler
             ->expects($this->once())
@@ -2546,7 +2603,7 @@ class ClientTest extends BaseTestCase
 
     public function testCanDoTicketReissueConfirmedPricing()
     {
-        $mockSessionHandler = $this->getMockBuilder('Amadeus\Client\Session\Handler\HandlerInterface')->getMock();
+        $mockSessionHandler = $this->createMock('Amadeus\Client\Session\Handler\HandlerInterface');
 
         $mockedSendResult = new Client\Session\Handler\SendResult();
         $mockedSendResult->responseXml = 'dummyTicketReissueConfirmedPricingMessage';
@@ -2576,7 +2633,7 @@ class ClientTest extends BaseTestCase
             ->method('getMessagesAndVersions')
             ->will($this->returnValue(['Ticket_ReissueConfirmedPricing' => ['version' => "13.2", 'wsdl' => 'dc22e4ee']]));
 
-        $mockResponseHandler = $this->getMockBuilder('Amadeus\Client\ResponseHandler\ResponseHandlerInterface')->getMock();
+        $mockResponseHandler = $this->createMock('Amadeus\Client\ResponseHandler\ResponseHandlerInterface');
 
         $mockResponseHandler
             ->expects($this->once())
@@ -2605,7 +2662,7 @@ class ClientTest extends BaseTestCase
 
     public function testCanDoTicketCancelDocument()
     {
-        $mockSessionHandler = $this->getMockBuilder('Amadeus\Client\Session\Handler\HandlerInterface')->getMock();
+        $mockSessionHandler = $this->createMock('Amadeus\Client\Session\Handler\HandlerInterface');
 
         $mockedSendResult = new Client\Session\Handler\SendResult();
         $mockedSendResult->responseXml = 'dummyTicketCancelDocumentMessage';
@@ -2637,7 +2694,7 @@ class ClientTest extends BaseTestCase
             ->method('getMessagesAndVersions')
             ->will($this->returnValue(['Ticket_CancelDocument' => ['version' => "11.1", 'wsdl' => 'dc22e4ee']]));
 
-        $mockResponseHandler = $this->getMockBuilder('Amadeus\Client\ResponseHandler\ResponseHandlerInterface')->getMock();
+        $mockResponseHandler = $this->createMock('Amadeus\Client\ResponseHandler\ResponseHandlerInterface');
 
         $mockResponseHandler
             ->expects($this->once())
@@ -2668,7 +2725,7 @@ class ClientTest extends BaseTestCase
 
     public function testCanDoTicketProcessEDocDocument()
     {
-        $mockSessionHandler = $this->getMockBuilder('Amadeus\Client\Session\Handler\HandlerInterface')->getMock();
+        $mockSessionHandler = $this->createMock('Amadeus\Client\Session\Handler\HandlerInterface');
 
         $mockedSendResult = new Client\Session\Handler\SendResult();
         $mockedSendResult->responseXml = 'dummyTicketProcessEDocMessage';
@@ -2699,7 +2756,7 @@ class ClientTest extends BaseTestCase
             ->method('getMessagesAndVersions')
             ->will($this->returnValue(['Ticket_ProcessEDoc' => ['version' => "15.2", 'wsdl' => 'dc22e4ee']]));
 
-        $mockResponseHandler = $this->getMockBuilder('Amadeus\Client\ResponseHandler\ResponseHandlerInterface')->getMock();
+        $mockResponseHandler = $this->createMock('Amadeus\Client\ResponseHandler\ResponseHandlerInterface');
 
         $mockResponseHandler
             ->expects($this->once())
@@ -2729,7 +2786,7 @@ class ClientTest extends BaseTestCase
 
     public function testCanDoTicketProcessETicketDocument()
     {
-        $mockSessionHandler = $this->getMockBuilder('Amadeus\Client\Session\Handler\HandlerInterface')->getMock();
+        $mockSessionHandler = $this->createMock('Amadeus\Client\Session\Handler\HandlerInterface');
 
         $mockedSendResult = new Client\Session\Handler\SendResult();
         $mockedSendResult->responseXml = 'dummyTicketProcessETicketMessage';
@@ -2760,7 +2817,7 @@ class ClientTest extends BaseTestCase
             ->method('getMessagesAndVersions')
             ->will($this->returnValue(['Ticket_ProcessETicket' => ['version' => "15.2", 'wsdl' => 'dc22e4ee']]));
 
-        $mockResponseHandler = $this->getMockBuilder('Amadeus\Client\ResponseHandler\ResponseHandlerInterface')->getMock();
+        $mockResponseHandler = $this->createMock('Amadeus\Client\ResponseHandler\ResponseHandlerInterface');
 
         $mockResponseHandler
             ->expects($this->once())
@@ -2790,7 +2847,7 @@ class ClientTest extends BaseTestCase
 
     public function testCanDoOfferConfirmAirOffer()
     {
-        $mockSessionHandler = $this->getMockBuilder('Amadeus\Client\Session\Handler\HandlerInterface')->getMock();
+        $mockSessionHandler = $this->createMock('Amadeus\Client\Session\Handler\HandlerInterface');
 
         $mockedSendResult = new Client\Session\Handler\SendResult();
         $mockedSendResult->responseXml = 'dummyofferconfirmairmessage';
@@ -2815,7 +2872,7 @@ class ClientTest extends BaseTestCase
             ->method('getMessagesAndVersions')
             ->will($this->returnValue(['Offer_ConfirmAirOffer' => ['version' => "11.1", 'wsdl' => 'dc22e4ee']]));
 
-        $mockResponseHandler = $this->getMockBuilder('Amadeus\Client\ResponseHandler\ResponseHandlerInterface')->getMock();
+        $mockResponseHandler = $this->createMock('Amadeus\Client\ResponseHandler\ResponseHandlerInterface');
 
         $mockResponseHandler
             ->expects($this->once())
@@ -2844,7 +2901,7 @@ class ClientTest extends BaseTestCase
 
     public function testCanSendAirSellFromRecommendation()
     {
-        $mockSessionHandler = $this->getMockBuilder('Amadeus\Client\Session\Handler\HandlerInterface')->getMock();
+        $mockSessionHandler = $this->createMock('Amadeus\Client\Session\Handler\HandlerInterface');
 
         $mockedSendResult = new Client\Session\Handler\SendResult();
         $mockedSendResult->responseXml = 'dummyairsellfromrecommendationrmessage';
@@ -2887,7 +2944,7 @@ class ClientTest extends BaseTestCase
             ->method('getMessagesAndVersions')
             ->will($this->returnValue(['Air_SellFromRecommendation' => ['version' => "5.2", 'wsdl' => 'dc22e4ee']]));
 
-        $mockResponseHandler = $this->getMockBuilder('Amadeus\Client\ResponseHandler\ResponseHandlerInterface')->getMock();
+        $mockResponseHandler = $this->createMock('Amadeus\Client\ResponseHandler\ResponseHandlerInterface');
 
         $mockResponseHandler
             ->expects($this->once())
@@ -2933,7 +2990,7 @@ class ClientTest extends BaseTestCase
 
     public function testCanSendAirRebookAirSegment()
     {
-        $mockSessionHandler = $this->getMockBuilder('Amadeus\Client\Session\Handler\HandlerInterface')->getMock();
+        $mockSessionHandler = $this->createMock('Amadeus\Client\Session\Handler\HandlerInterface');
 
         $mockedSendResult = new Client\Session\Handler\SendResult();
         $mockedSendResult->responseXml = 'dummyairrebookairsegmentmessage';
@@ -2996,7 +3053,7 @@ class ClientTest extends BaseTestCase
             ->method('getMessagesAndVersions')
             ->will($this->returnValue(['Air_RebookAirSegment' => ['version' => "14.1", 'wsdl' => 'dc22e4ee']]));
 
-        $mockResponseHandler = $this->getMockBuilder('Amadeus\Client\ResponseHandler\ResponseHandlerInterface')->getMock();
+        $mockResponseHandler = $this->createMock('Amadeus\Client\ResponseHandler\ResponseHandlerInterface');
 
         $mockResponseHandler
             ->expects($this->once())
@@ -3062,7 +3119,7 @@ class ClientTest extends BaseTestCase
 
     public function testCanSendAirFlightInfo()
     {
-        $mockSessionHandler = $this->getMockBuilder('Amadeus\Client\Session\Handler\HandlerInterface')->getMock();
+        $mockSessionHandler = $this->createMock('Amadeus\Client\Session\Handler\HandlerInterface');
 
         $mockedSendResult = new Client\Session\Handler\SendResult();
         $mockedSendResult->responseXml = 'dummyairflightinformessage';
@@ -3092,7 +3149,7 @@ class ClientTest extends BaseTestCase
             ->method('getMessagesAndVersions')
             ->will($this->returnValue(['Air_FlightInfo' => ['version' => "7.1", 'wsdl' => 'dc22e4ee']]));
 
-        $mockResponseHandler = $this->getMockBuilder('Amadeus\Client\ResponseHandler\ResponseHandlerInterface')->getMock();
+        $mockResponseHandler = $this->createMock('Amadeus\Client\ResponseHandler\ResponseHandlerInterface');
 
         $mockResponseHandler
             ->expects($this->once())
@@ -3125,7 +3182,7 @@ class ClientTest extends BaseTestCase
 
     public function testCanSendAirRetrieveSeatMap()
     {
-        $mockSessionHandler = $this->getMockBuilder('Amadeus\Client\Session\Handler\HandlerInterface')->getMock();
+        $mockSessionHandler = $this->createMock('Amadeus\Client\Session\Handler\HandlerInterface');
 
         $mockedSendResult = new Client\Session\Handler\SendResult();
         $mockedSendResult->responseXml = $this->getTestFile('airRetrieveSeatMapReply142.txt');
@@ -3157,7 +3214,7 @@ class ClientTest extends BaseTestCase
             ->method('getMessagesAndVersions')
             ->will($this->returnValue(['Air_RetrieveSeatMap' => ['version' => "14.2", 'wsdl' => 'dc22e4ee']]));
 
-        $mockResponseHandler = $this->getMockBuilder('Amadeus\Client\ResponseHandler\ResponseHandlerInterface')->getMock();
+        $mockResponseHandler = $this->createMock('Amadeus\Client\ResponseHandler\ResponseHandlerInterface');
 
         $mockResponseHandler
             ->expects($this->once())
@@ -3192,7 +3249,7 @@ class ClientTest extends BaseTestCase
 
     public function testCanSendAirMultiAvailability()
     {
-        $mockSessionHandler = $this->getMockBuilder('Amadeus\Client\Session\Handler\HandlerInterface')->getMock();
+        $mockSessionHandler = $this->createMock('Amadeus\Client\Session\Handler\HandlerInterface');
 
         $mockedSendResult = new Client\Session\Handler\SendResult();
         $mockedSendResult->responseXml = $this->getTestFile('AirMultiAvailabilityReply.txt');
@@ -3226,7 +3283,7 @@ class ClientTest extends BaseTestCase
             ->method('getMessagesAndVersions')
             ->will($this->returnValue(['Air_MultiAvailability' => ['version' => "14.1", 'wsdl' => 'dc22e4ee']]));
 
-        $mockResponseHandler = $this->getMockBuilder('Amadeus\Client\ResponseHandler\ResponseHandlerInterface')->getMock();
+        $mockResponseHandler = $this->createMock('Amadeus\Client\ResponseHandler\ResponseHandlerInterface');
 
         $mockResponseHandler
             ->expects($this->once())
@@ -3263,7 +3320,7 @@ class ClientTest extends BaseTestCase
 
     public function testCanSendFareMasterPricerExpertSearch()
     {
-        $mockSessionHandler = $this->getMockBuilder('Amadeus\Client\Session\Handler\HandlerInterface')->getMock();
+        $mockSessionHandler = $this->createMock('Amadeus\Client\Session\Handler\HandlerInterface');
 
         $mockedSendResult = new Client\Session\Handler\SendResult();
         $mockedSendResult->responseXml = $this->getTestFile('fareMasterPricerExpertSearchReply-12.4.txt');
@@ -3308,7 +3365,7 @@ class ClientTest extends BaseTestCase
             ->method('getMessagesAndVersions')
             ->will($this->returnValue(['Fare_MasterPricerExpertSearch' => ['version' => "12.3", 'wsdl' => 'dc22e4ee']]));
 
-        $mockResponseHandler = $this->getMockBuilder('Amadeus\Client\ResponseHandler\ResponseHandlerInterface')->getMock();
+        $mockResponseHandler = $this->createMock('Amadeus\Client\ResponseHandler\ResponseHandlerInterface');
         $mockResponseHandler
             ->expects($this->once())
             ->method('analyzeResponse')
@@ -3355,7 +3412,7 @@ class ClientTest extends BaseTestCase
 
     public function testCanSendFareMasterPricerTravelBoardSearch()
     {
-        $mockSessionHandler = $this->getMockBuilder('Amadeus\Client\Session\Handler\HandlerInterface')->getMock();
+        $mockSessionHandler = $this->createMock('Amadeus\Client\Session\Handler\HandlerInterface');
 
         $mockedSendResult = new Client\Session\Handler\SendResult();
         $mockedSendResult->responseXml = 'dummyfarepricemasterpricertravelboardsearchresponsemessage';
@@ -3400,7 +3457,7 @@ class ClientTest extends BaseTestCase
             ->method('getMessagesAndVersions')
             ->will($this->returnValue(['Fare_MasterPricerTravelBoardSearch' => ['version' => "12.3", 'wsdl' => 'dc22e4ee']]));
 
-        $mockResponseHandler = $this->getMockBuilder('Amadeus\Client\ResponseHandler\ResponseHandlerInterface')->getMock();
+        $mockResponseHandler = $this->createMock('Amadeus\Client\ResponseHandler\ResponseHandlerInterface');
 
         $mockResponseHandler
             ->expects($this->once())
@@ -3448,7 +3505,7 @@ class ClientTest extends BaseTestCase
 
     public function testCanSendFareMasterPricerCalendar()
     {
-        $mockSessionHandler = $this->getMockBuilder('Amadeus\Client\Session\Handler\HandlerInterface')->getMock();
+        $mockSessionHandler = $this->createMock('Amadeus\Client\Session\Handler\HandlerInterface');
 
         $mockedSendResult = new Client\Session\Handler\SendResult();
         $mockedSendResult->responseXml = 'dummyfarepricemasterpricercalendarresponsemessage';
@@ -3495,7 +3552,7 @@ class ClientTest extends BaseTestCase
             ->method('getMessagesAndVersions')
             ->will($this->returnValue(['Fare_MasterPricerCalendar' => ['version' => "14.3", 'wsdl' => 'dc22e4ee']]));
 
-        $mockResponseHandler = $this->getMockBuilder('Amadeus\Client\ResponseHandler\ResponseHandlerInterface')->getMock();
+        $mockResponseHandler = $this->createMock('Amadeus\Client\ResponseHandler\ResponseHandlerInterface');
 
         $mockResponseHandler
             ->expects($this->once())
@@ -3545,7 +3602,7 @@ class ClientTest extends BaseTestCase
 
     public function testCanSendPriceXplorerExtremeSearch()
     {
-        $mockSessionHandler = $this->getMockBuilder('Amadeus\Client\Session\Handler\HandlerInterface')->getMock();
+        $mockSessionHandler = $this->createMock('Amadeus\Client\Session\Handler\HandlerInterface');
 
         $mockedSendResult = new Client\Session\Handler\SendResult();
         $mockedSendResult->responseXml = 'dummypricexplorerextremesearchresponsemessage';
@@ -3576,7 +3633,7 @@ class ClientTest extends BaseTestCase
             ->method('getMessagesAndVersions')
             ->will($this->returnValue(['PriceXplorer_ExtremeSearch' => ['version' => "10.3", 'wsdl' => 'dc22e4ee']]));
 
-        $mockResponseHandler = $this->getMockBuilder('Amadeus\Client\ResponseHandler\ResponseHandlerInterface')->getMock();
+        $mockResponseHandler = $this->createMock('Amadeus\Client\ResponseHandler\ResponseHandlerInterface');
 
         $mockResponseHandler
             ->expects($this->once())
@@ -3610,7 +3667,7 @@ class ClientTest extends BaseTestCase
 
     public function testCanSendSalesReportsDisplayQueryReport()
     {
-        $mockSessionHandler = $this->getMockBuilder('Amadeus\Client\Session\Handler\HandlerInterface')->getMock();
+        $mockSessionHandler = $this->createMock('Amadeus\Client\Session\Handler\HandlerInterface');
 
         $mockedSendResult = new Client\Session\Handler\SendResult();
         $mockedSendResult->responseXml = $this->getTestFile('SalesReportsDisplayQueryReportReply.txt');
@@ -3638,7 +3695,7 @@ class ClientTest extends BaseTestCase
             ->method('getMessagesAndVersions')
             ->will($this->returnValue(['SalesReports_DisplayQueryReport' => ['version' => "12.1", 'wsdl' => 'dc22e4ee']]));
 
-        $mockResponseHandler = $this->getMockBuilder('Amadeus\Client\ResponseHandler\ResponseHandlerInterface')->getMock();
+        $mockResponseHandler = $this->createMock('Amadeus\Client\ResponseHandler\ResponseHandlerInterface');
 
         $mockResponseHandler
             ->expects($this->once())
@@ -3669,7 +3726,7 @@ class ClientTest extends BaseTestCase
 
     public function testCanSendSalesReportsDisplayDailyOrSummarizedReport()
     {
-        $mockSessionHandler = $this->getMockBuilder('Amadeus\Client\Session\Handler\HandlerInterface')->getMock();
+        $mockSessionHandler = $this->createMock('Amadeus\Client\Session\Handler\HandlerInterface');
 
         $mockedSendResult = new Client\Session\Handler\SendResult();
         $mockedSendResult->responseXml = $this->getTestFile('SalesReportsDisplayDailyOrSummarizedReportReply.txt');
@@ -3697,7 +3754,7 @@ class ClientTest extends BaseTestCase
             ->method('getMessagesAndVersions')
             ->will($this->returnValue(['SalesReports_DisplayDailyOrSummarizedReport' => ['version' => "12.1", 'wsdl' => 'dc22e4ee']]));
 
-        $mockResponseHandler = $this->getMockBuilder('Amadeus\Client\ResponseHandler\ResponseHandlerInterface')->getMock();
+        $mockResponseHandler = $this->createMock('Amadeus\Client\ResponseHandler\ResponseHandlerInterface');
 
         $mockResponseHandler
             ->expects($this->once())
@@ -3728,7 +3785,7 @@ class ClientTest extends BaseTestCase
 
     public function testCanSendSalesReportsDisplayNetRemitReport()
     {
-        $mockSessionHandler = $this->getMockBuilder('Amadeus\Client\Session\Handler\HandlerInterface')->getMock();
+        $mockSessionHandler = $this->createMock('Amadeus\Client\Session\Handler\HandlerInterface');
 
         $mockedSendResult = new Client\Session\Handler\SendResult();
         $mockedSendResult->responseXml = $this->getTestFile('SalesReportsDisplayNetRemitReportReply.txt');
@@ -3756,7 +3813,7 @@ class ClientTest extends BaseTestCase
             ->method('getMessagesAndVersions')
             ->will($this->returnValue(['SalesReports_DisplayNetRemitReport' => ['version' => "12.1", 'wsdl' => 'dc22e4ee']]));
 
-        $mockResponseHandler = $this->getMockBuilder('Amadeus\Client\ResponseHandler\ResponseHandlerInterface')->getMock();
+        $mockResponseHandler = $this->createMock('Amadeus\Client\ResponseHandler\ResponseHandlerInterface');
 
         $mockResponseHandler
             ->expects($this->once())
@@ -3785,9 +3842,734 @@ class ClientTest extends BaseTestCase
         $this->assertEquals($messageResult, $response);
     }
 
+    public function testCanSendTravelOfferPrice(): void
+    {
+        $sessionHandlerMock = $this->createMock(HandlerInterface::class);
+
+        $mockedSendResult = new Client\Session\Handler\SendResult();
+        $mockedSendResult->responseXml = $this->getTestFile('TravelOfferPriceReply.xml');
+        $messageResult = new Client\Result($mockedSendResult);
+
+        $offerPriceRequestOptions = new Client\RequestOptions\TravelOfferPriceOptions([
+            'dataLists' => [
+                new Client\RequestOptions\Travel\DataList([
+                    'paxList' => new Client\RequestOptions\Travel\PaxList([
+                        'pax' => [
+                            new Client\RequestOptions\Travel\Pax([
+                                'paxId' => 'T1',
+                                'ptc' => 'ADT',
+                            ]),
+                        ],
+                    ]),
+                ]),
+            ],
+            'pricedOffer' => new Client\RequestOptions\Travel\PricedOffer([
+                'selectedOffer' => new Client\RequestOptions\Travel\SelectedOffer([
+                    'offerRefID' => 'OfferRef1',
+                    'ownerCode' => 'AA',
+                    'shoppingResponseRefID' => 'ShopRef1',
+                    'selectedOfferItems' => [
+                        new Client\RequestOptions\Travel\SelectedOfferItem([
+                            'offerItemRefId' => 'ItemRef1',
+                            'paxRefId' => [
+                                'T1',
+                            ],
+                        ]),
+                    ],
+                ]),
+            ]),
+        ]);
+
+        $expectedMessageResult = new Client\Struct\Travel\OfferPrice($offerPriceRequestOptions);
+
+        $sessionHandlerMock
+            ->expects($this->once())
+            ->method('sendMessage')
+            ->with('Travel_OfferPrice', $expectedMessageResult, ['endSession' => false, 'returnXml' => true])
+            ->willReturn($mockedSendResult);
+
+        $sessionHandlerMock
+            ->expects($this->once())
+            ->method('getMessagesAndVersions')
+            ->willReturn(self::getNdcWsdlMessagesAndVersions());
+
+        $responseHandlerMock = $this->createMock(ResponseHandlerInterface::class);
+
+        $responseHandlerMock
+            ->expects($this->once())
+            ->method('analyzeResponse')
+            ->with($mockedSendResult, 'Travel_OfferPrice')
+            ->willReturn($messageResult);
+
+        $params = new Params();
+        $params->sessionHandler = $sessionHandlerMock;
+        $params->requestCreatorParams = new Params\RequestCreatorParams([
+            'receivedFrom' => 'some RF string',
+            'originatorOfficeId' => 'BRUXXXXXX',
+        ]);
+        $params->responseHandler = $responseHandlerMock;
+
+        $client = new Client($params);
+
+        $response = $client->travelOfferPrice($offerPriceRequestOptions);
+
+        $this->assertEquals($messageResult, $response);
+    }
+
+    public function testCanSendTravelOrderCreate(): void
+    {
+        $sessionHandlerMock = $this->createMock(HandlerInterface::class);
+
+        $mockedSendResult = new Client\Session\Handler\SendResult();
+        $mockedSendResult->responseXml = $this->getTestFile('TravelOrderCreateReply.xml');
+        $messageResult = new Client\Result($mockedSendResult);
+
+        $orderCreateRequestOptions = new Client\RequestOptions\TravelOrderCreateOptions([
+            'dataLists' => [
+                new Client\RequestOptions\Travel\DataList([
+                    'paxList' => new Client\RequestOptions\Travel\PaxList([
+                        'pax' => [
+                            new Client\RequestOptions\Travel\Pax([
+                                'paxId' => 'T1',
+                                'ptc' => 'ADT',
+                                'dob' => new \DateTime('1990-01-01'),
+                                'genderCode' => 'M',
+                                'firstName' => 'John',
+                                'lastName' => 'Doe',
+                                'phoneNumber' => '5552225555',
+                                'email' => 'example@test.com',
+                                'passengerContactRefused' => true,
+                            ]),
+                        ],
+                    ]),
+                ]),
+            ],
+            'pricedOffer' => new Client\RequestOptions\Travel\PricedOffer([
+                'selectedOffer' => new Client\RequestOptions\Travel\SelectedOffer([
+                    'offerRefID' => 'OfferRef1',
+                    'ownerCode' => 'AA',
+                    'shoppingResponseRefID' => 'ShopRef1',
+                    'selectedOfferItems' => [
+                        new Client\RequestOptions\Travel\SelectedOfferItem([
+                            'offerItemRefId' => 'ItemRef1',
+                            'paxRefId' => [
+                                'T1',
+                            ],
+                        ]),
+                    ],
+                ]),
+            ]),
+        ]);
+
+        $expectedMessageResult = new Client\Struct\Travel\OrderCreate($orderCreateRequestOptions);
+
+        $sessionHandlerMock
+            ->expects($this->once())
+            ->method('sendMessage')
+            ->with('Travel_OrderCreate', $expectedMessageResult, ['endSession' => false, 'returnXml' => true])
+            ->willReturn($mockedSendResult);
+
+        $sessionHandlerMock
+            ->expects($this->once())
+            ->method('getMessagesAndVersions')
+            ->willReturn(self::getNdcWsdlMessagesAndVersions());
+
+        $responseHandlerMock = $this->createMock(ResponseHandlerInterface::class);
+
+        $responseHandlerMock
+            ->expects($this->once())
+            ->method('analyzeResponse')
+            ->with($mockedSendResult, 'Travel_OrderCreate')
+            ->willReturn($messageResult);
+
+        $params = new Params();
+        $params->sessionHandler = $sessionHandlerMock;
+        $params->requestCreatorParams = new Params\RequestCreatorParams([
+            'receivedFrom' => 'some RF string',
+            'originatorOfficeId' => 'BRUXXXXXX',
+        ]);
+        $params->responseHandler = $responseHandlerMock;
+
+        $client = new Client($params);
+
+        $response = $client->travelOrderCreate($orderCreateRequestOptions);
+
+        $this->assertEquals($messageResult, $response);
+    }
+
+    public function testCanSendTravelOrderPay(): void
+    {
+        $sessionHandlerMock = $this->createMock(HandlerInterface::class);
+
+        $mockedSendResult = new Client\Session\Handler\SendResult();
+        $mockedSendResult->responseXml = $this->getTestFile('TravelOrderPayReply.xml');
+        $messageResult = new Client\Result($mockedSendResult);
+
+        $orderPayRequestOptions = new Client\RequestOptions\TravelOrderPayOptions([
+            'orderId' => 'AA12345',
+            'ownerCode' => 'AA',
+            'amount' => 249.45,
+            'currencyCode' => 'USD',
+            'type' => Client\RequestOptions\TravelOrderPayOptions::PAYMENT_TYPE_CASH,
+        ]);
+
+        $expectedMessageResult = new Client\Struct\Travel\OrderPay($orderPayRequestOptions);
+
+        $sessionHandlerMock
+            ->expects($this->once())
+            ->method('sendMessage')
+            ->with('Travel_OrderPay', $expectedMessageResult, ['endSession' => false, 'returnXml' => true])
+            ->willReturn($mockedSendResult);
+
+        $sessionHandlerMock
+            ->expects($this->once())
+            ->method('getMessagesAndVersions')
+            ->willReturn(self::getNdcWsdlMessagesAndVersions());
+
+        $responseHandlerMock = $this->createMock(ResponseHandlerInterface::class);
+
+        $responseHandlerMock
+            ->expects($this->once())
+            ->method('analyzeResponse')
+            ->with($mockedSendResult, 'Travel_OrderPay')
+            ->willReturn($messageResult);
+
+        $params = new Params();
+        $params->sessionHandler = $sessionHandlerMock;
+        $params->requestCreatorParams = new Params\RequestCreatorParams([
+            'receivedFrom' => 'some RF string',
+            'originatorOfficeId' => 'BRUXXXXXX',
+        ]);
+        $params->responseHandler = $responseHandlerMock;
+
+        $client = new Client($params);
+
+        $response = $client->travelOrderPay($orderPayRequestOptions);
+
+        $this->assertEquals($messageResult, $response);
+    }
+
+    public function testCanSendTravelOrderRetrieve(): void
+    {
+        $sessionHandlerMock = $this->createMock(HandlerInterface::class);
+
+        $mockedSendResult = new Client\Session\Handler\SendResult();
+        $mockedSendResult->responseXml = $this->getTestFile('TravelOrderRetrieveReply.xml');
+
+        $messageResult = new Client\Result($mockedSendResult);
+
+        $orderRetrieveOptions = new Client\RequestOptions\TravelOrderRetrieveOptions([
+            'orderId' => 'AA001HLSXQ4A2',
+            'ownerCode' => 'AA',
+            'party' => new Client\RequestOptions\Travel\Party([
+                'sender' => new Client\RequestOptions\Travel\Sender([
+                    'travelAgency' => new Client\RequestOptions\Travel\TravelAgency([
+                        'agencyId' => '123456',
+                        'pseudoCityId' => 'NYCXXXX',
+                    ]),
+                ]),
+            ]),
+        ]);
+
+        $expectedMessageResult = new Client\Struct\Travel\OrderRetrieve($orderRetrieveOptions);
+
+        $sessionHandlerMock
+            ->expects($this->once())
+            ->method('sendMessage')
+            ->with('Travel_OrderRetrieve', $expectedMessageResult, ['endSession' => false, 'returnXml' => true])
+            ->willReturn($mockedSendResult);
+
+        $sessionHandlerMock
+            ->expects($this->once())
+            ->method('getMessagesAndVersions')
+            ->willReturn(self::getNdcWsdlMessagesAndVersions());
+
+        $responseHandlerMock = $this->createMock(ResponseHandlerInterface::class);
+
+        $responseHandlerMock
+            ->expects($this->once())
+            ->method('analyzeResponse')
+            ->with($mockedSendResult, 'Travel_OrderRetrieve')
+            ->willReturn($messageResult);
+
+        $params = new Params();
+        $params->sessionHandler = $sessionHandlerMock;
+        $params->requestCreatorParams = new Params\RequestCreatorParams([
+            'receivedFrom' => 'some RF string',
+            'originatorOfficeId' => 'BRUXXXXXX',
+        ]);
+        $params->responseHandler = $responseHandlerMock;
+
+        $client = new Client($params);
+
+        $response = $client->travelOrderRetrieve($orderRetrieveOptions);
+
+        $this->assertEquals($messageResult, $response);
+    }
+
+    public function testCanSendTravelOrderCancel(): void
+    {
+        $sessionHandlerMock = $this->createMock(HandlerInterface::class);
+
+        $mockedSendResult = new Client\Session\Handler\SendResult();
+        $mockedSendResult->responseXml = $this->getTestFile('TravelOrderCancelReply.xml');
+
+        $messageResult = new Client\Result($mockedSendResult);
+
+        $expectedMessageResult = new Client\Struct\Travel\OrderCancel(
+            new Client\RequestOptions\TravelOrderCancelOptions([
+                'orderId' => 'AA12345',
+                'ownerCode' => 'AA',
+            ]),
+        );
+
+        $sessionHandlerMock
+            ->expects($this->once())
+            ->method('sendMessage')
+            ->with('Travel_OrderCancel', $expectedMessageResult, ['endSession' => false, 'returnXml' => true])
+            ->willReturn($mockedSendResult);
+
+        $sessionHandlerMock
+            ->expects($this->once())
+            ->method('getMessagesAndVersions')
+            ->willReturn(self::getNdcWsdlMessagesAndVersions());
+
+        $responseHandlerMock = $this->createMock(ResponseHandlerInterface::class);
+
+        $responseHandlerMock
+            ->expects($this->once())
+            ->method('analyzeResponse')
+            ->with($mockedSendResult, 'Travel_OrderCancel')
+            ->willReturn($messageResult);
+
+        $params = new Params();
+        $params->sessionHandler = $sessionHandlerMock;
+        $params->requestCreatorParams = new Params\RequestCreatorParams([
+            'receivedFrom' => 'some RF string',
+            'originatorOfficeId' => 'BRUXXXXXX',
+        ]);
+        $params->responseHandler = $responseHandlerMock;
+
+        $client = new Client($params);
+
+        $response = $client->travelOrderCancel(
+            new Client\RequestOptions\TravelOrderCancelOptions([
+                'orderId' => 'AA12345',
+                'ownerCode' => 'AA',
+            ]),
+        );
+
+        $this->assertEquals($messageResult, $response);
+    }
+
+    public function testCanSendTravelServiceList(): void
+    {
+        $sessionHandlerMock = $this->createMock(HandlerInterface::class);
+
+        $mockedSendResult = new Client\Session\Handler\SendResult();
+        $mockedSendResult->responseXml = $this->getTestFile('TravelServiceListReply.xml');
+
+        $messageResult = new Client\Result($mockedSendResult);
+
+        $serviceListOptions = new Client\RequestOptions\TravelServiceListOptions([
+            'ownerCode' => 'AA',
+            'offerId' => '1A_TPID_CiESG1NQMUYtMTQxOAI=',
+            'offerItemId' => '1A_TPID_CAESH-VNQMUYS0x',
+            'shoppingResponseId' => 'SP1F-14193187327050054900',
+            'serviceId' => 1,
+        ]);
+
+        $expectedMessageResult = new Client\Struct\Travel\ServiceList($serviceListOptions);
+
+        $sessionHandlerMock
+            ->expects($this->once())
+            ->method('sendMessage')
+            ->with('Travel_ServiceList', $expectedMessageResult, ['endSession' => false, 'returnXml' => true])
+            ->willReturn($mockedSendResult);
+
+        $sessionHandlerMock
+            ->expects($this->once())
+            ->method('getMessagesAndVersions')
+            ->willReturn(self::getNdcWsdlMessagesAndVersions());
+
+        $responseHandlerMock = $this->createMock(ResponseHandlerInterface::class);
+
+        $responseHandlerMock
+            ->expects($this->once())
+            ->method('analyzeResponse')
+            ->with($mockedSendResult, 'Travel_ServiceList')
+            ->willReturn($messageResult);
+
+        $params = new Params();
+        $params->sessionHandler = $sessionHandlerMock;
+        $params->requestCreatorParams = new Params\RequestCreatorParams([
+            'receivedFrom' => 'some RF string',
+            'originatorOfficeId' => 'BRUXXXXXX',
+        ]);
+        $params->responseHandler = $responseHandlerMock;
+
+        $client = new Client($params);
+
+        $response = $client->travelServiceList($serviceListOptions);
+
+        $this->assertEquals($messageResult, $response);
+    }
+
+    public function testCanSendTravelSeatAvailability(): void
+    {
+        $sessionHandlerMock = $this->createMock(HandlerInterface::class);
+
+        $mockedSendResult = new Client\Session\Handler\SendResult();
+        $mockedSendResult->responseXml = $this->getTestFile('TravelSeatAvailabilityReply.xml');
+
+        $messageResult = new Client\Result($mockedSendResult);
+
+        $seatAvailabilityOptions = new Client\RequestOptions\TravelSeatAvailabilityOptions([
+            'ownerCode' => 'AA12345',
+            'offerItemId' => 'AA',
+            'shoppingResponseId' => 'Pr_Re-sponseID_00',
+        ]);
+
+        $expectedMessageResult = new Client\Struct\Travel\SeatAvailability($seatAvailabilityOptions);
+
+        $sessionHandlerMock
+            ->expects($this->once())
+            ->method('sendMessage')
+            ->with('Travel_SeatAvailability', $expectedMessageResult, ['endSession' => false, 'returnXml' => true])
+            ->willReturn($mockedSendResult);
+
+        $sessionHandlerMock
+            ->expects($this->once())
+            ->method('getMessagesAndVersions')
+            ->willReturn(self::getNdcWsdlMessagesAndVersions());
+
+        $responseHandlerMock = $this->createMock(ResponseHandlerInterface::class);
+
+        $responseHandlerMock
+            ->expects($this->once())
+            ->method('analyzeResponse')
+            ->with($mockedSendResult, 'Travel_SeatAvailability')
+            ->willReturn($messageResult);
+
+        $params = new Params();
+        $params->sessionHandler = $sessionHandlerMock;
+        $params->requestCreatorParams = new Params\RequestCreatorParams([
+            'receivedFrom' => 'some RF string',
+            'originatorOfficeId' => 'BRUXXXXXX',
+        ]);
+        $params->responseHandler = $responseHandlerMock;
+
+        $client = new Client($params);
+
+        $response = $client->travelSeatAvailability($seatAvailabilityOptions);
+
+        $this->assertEquals($messageResult, $response);
+    }
+
+    public function testCanSendTravelOrderChange(): void
+    {
+        $sessionHandlerMock = $this->createMock(HandlerInterface::class);
+
+        $mockedSendResult = new Client\Session\Handler\SendResult();
+        $mockedSendResult->responseXml = $this->getTestFile('TravelOrderChangeReply.xml');
+
+        $messageResult = new Client\Result($mockedSendResult);
+
+        $orderChangeOptions = new Client\RequestOptions\TravelOrderChangeOptions([
+            'updateOrderItem' => new Client\RequestOptions\Travel\OrderChange\UpdateOrderItem([
+                'offer' => new Client\RequestOptions\Travel\SelectedOffer([
+                    'offerRefID' => '1A_TPID_CiESG1NQMUYtMTQxOAI=',
+                    'ownerCode' => 'AA',
+                    'shoppingResponseRefID' => 'SP1F-14193187327050054900',
+                    'selectedOfferItems' => [
+                        new Client\RequestOptions\Travel\SelectedOfferItem([
+                            'offerItemRefId' => '1A_TPID_CAESH-VNQMUYS0x',
+                            'paxRefId' => 'T1',
+                            'selectedAlaCarteOfferItem' => [
+                                new Client\RequestOptions\Travel\SelectedAlaCarteOfferItem([
+                                    'quantity' => 1,
+                                ]),
+                            ],
+                            'selectedSeat' => new Client\RequestOptions\Travel\SelectedSeat([
+                                'column' => 'A',
+                                'rowNumber' => 12,
+                            ]),
+                        ]),
+                    ],
+                ]),
+            ]),
+            'dataLists' => [
+                new Client\RequestOptions\Travel\DataList([
+                    'paxList' => new Client\RequestOptions\Travel\PaxList([
+                        'pax' => [
+                            new Client\RequestOptions\Travel\Pax([
+                                'paxId' => 'T1',
+                                'ptc' => 'ADT',
+                                'genderCode' => 'M',
+                                'dob' => new \DateTime('1994-01-01'),
+                                'firstName' => 'John',
+                                'lastName' => 'Doe',
+                            ]),
+                        ],
+                    ]),
+                ]),
+            ],
+            'ownerCode' => 'AA12345',
+            'offerItemId' => 'AA',
+        ]);
+
+        $expectedMessageResult = new Client\Struct\Travel\OrderChange($orderChangeOptions);
+
+        $sessionHandlerMock
+            ->expects($this->once())
+            ->method('sendMessage')
+            ->with('Travel_OrderChange', $expectedMessageResult, ['endSession' => false, 'returnXml' => true])
+            ->willReturn($mockedSendResult);
+
+        $sessionHandlerMock
+            ->expects($this->once())
+            ->method('getMessagesAndVersions')
+            ->willReturn(self::getNdcWsdlMessagesAndVersions());
+
+        $responseHandlerMock = $this->createMock(ResponseHandlerInterface::class);
+
+        $responseHandlerMock
+            ->expects($this->once())
+            ->method('analyzeResponse')
+            ->with($mockedSendResult, 'Travel_OrderChange')
+            ->willReturn($messageResult);
+
+        $params = new Params();
+        $params->sessionHandler = $sessionHandlerMock;
+        $params->requestCreatorParams = new Params\RequestCreatorParams([
+            'receivedFrom' => 'some RF string',
+            'originatorOfficeId' => 'BRUXXXXXX',
+        ]);
+        $params->responseHandler = $responseHandlerMock;
+
+        $client = new Client($params);
+
+        $response = $client->travelOrderChange($orderChangeOptions);
+
+        $this->assertEquals($messageResult, $response);
+    }
+
+    public function testCanSendPayListVirtualCards(): void
+    {
+        $sessionHandlerMock = $this->createMock(HandlerInterface::class);
+
+        $mockedSendResult = new Client\Session\Handler\SendResult();
+        $mockedSendResult->responseXml = $this->getTestFile('PayListVirtualCardsReply.xml');
+
+        $messageResult = new Client\Result($mockedSendResult);
+
+        $requestOptions = new Client\RequestOptions\PayListVirtualCardsOptions([
+            'SubType' => Client\RequestOptions\PayListVirtualCardsOptions::SUBTYPE_PREPAID,
+            'CurrencyCode' => 'EUR',
+            'Period' => new Client\RequestOptions\Pay\Period([
+                'start' => new \DateTime('2017-04-01'),
+                'end' => new \DateTime('2017-04-18'),
+            ]),
+            'CardStatus' => Client\RequestOptions\PayListVirtualCardsOptions::CARD_STATUS_ACTIVE,
+        ]);
+
+        $expectedMessageResult = new Client\Struct\Pay\ListVirtualCards($requestOptions);
+
+        $sessionHandlerMock
+            ->expects($this->once())
+            ->method('sendMessage')
+            ->with('PAY_ListVirtualCards', $expectedMessageResult, ['endSession' => false, 'returnXml' => true])
+            ->willReturn($mockedSendResult);
+
+        $sessionHandlerMock
+            ->expects($this->once())
+            ->method('getMessagesAndVersions')
+            ->willReturn(self::getPayWsdlMessagesAndVersions());
+
+        $responseHandlerMock = $this->createMock(ResponseHandlerInterface::class);
+
+        $responseHandlerMock
+            ->expects($this->once())
+            ->method('analyzeResponse')
+            ->with($mockedSendResult, 'PAY_ListVirtualCards')
+            ->willReturn($messageResult);
+
+        $params = new Params();
+        $params->sessionHandler = $sessionHandlerMock;
+        $params->requestCreatorParams = new Params\RequestCreatorParams([
+            'receivedFrom' => 'some RF string',
+            'originatorOfficeId' => 'BRUXXXXXX',
+        ]);
+        $params->responseHandler = $responseHandlerMock;
+
+        $client = new Client($params);
+
+        $response = $client->payListVirtualCards($requestOptions);
+
+        self::assertEquals($messageResult, $response);
+    }
+
+    public function testCanSendPayGenerateVirtualCard(): void
+    {
+        $sessionHandlerMock = $this->createMock(HandlerInterface::class);
+
+        $mockedSendResult = new Client\Session\Handler\SendResult();
+        $mockedSendResult->responseXml = $this->getTestFile('PayGenerateVirtualCardReply.xml');
+
+        $messageResult = new Client\Result($mockedSendResult);
+
+        $requestOptions = new Client\RequestOptions\PayGenerateVirtualCardOptions([
+            'CardName' => 'Card_Friendly_Name_UNIQ',
+            'VendorCode' => Client\RequestOptions\PayGenerateVirtualCardOptions::VENDOR_VISA,
+            'ReturnCVV' => true,
+            'SubType' => Client\RequestOptions\PayGenerateVirtualCardOptions::SUBTYPE_DEBIT,
+            'Amount' => 1,
+            'DecimalPlaces' => 0,
+            'CurrencyCode' => 'EUR',
+            'maxAllowedTransactions' => 1,
+            'endValidityPeriod' => '2025-03-01',
+        ]);
+
+        $expectedMessageResult = new Client\Struct\Pay\GenerateVirtualCard($requestOptions);
+
+        $sessionHandlerMock
+            ->expects($this->once())
+            ->method('sendMessage')
+            ->with('PAY_GenerateVirtualCard', $expectedMessageResult, ['endSession' => false, 'returnXml' => true])
+            ->willReturn($mockedSendResult);
+
+        $sessionHandlerMock
+            ->expects($this->once())
+            ->method('getMessagesAndVersions')
+            ->willReturn(self::getPayWsdlMessagesAndVersions());
+
+        $responseHandlerMock = $this->createMock(ResponseHandlerInterface::class);
+
+        $responseHandlerMock
+            ->expects($this->once())
+            ->method('analyzeResponse')
+            ->with($mockedSendResult, 'PAY_GenerateVirtualCard')
+            ->willReturn($messageResult);
+
+        $params = new Params();
+        $params->sessionHandler = $sessionHandlerMock;
+        $params->requestCreatorParams = new Params\RequestCreatorParams([
+            'receivedFrom' => 'some RF string',
+            'originatorOfficeId' => 'BRUXXXXXX',
+        ]);
+        $params->responseHandler = $responseHandlerMock;
+
+        $client = new Client($params);
+
+        $response = $client->payGenerateVirtualCard($requestOptions);
+
+        self::assertEquals($messageResult, $response);
+    }
+
+    public function testCanSendPayGetVirtualCardDetails(): void
+    {
+        $sessionHandlerMock = $this->createMock(HandlerInterface::class);
+
+        $mockedSendResult = new Client\Session\Handler\SendResult();
+        $mockedSendResult->responseXml = $this->getTestFile('PayGetVirtualCardDetailsReply.xml');
+
+        $messageResult = new Client\Result($mockedSendResult);
+
+        $requestOptions = new Client\RequestOptions\PayGetVirtualCardDetailsOptions([
+            'amadeusReference' => '2222483Q',
+            'externalReference' => '0RABg9JZ0fdbtH28BiAtcJRd8',
+            'displayFilter' => Client\RequestOptions\PayGetVirtualCardDetailsOptions::FILTER_FULL,
+        ]);
+
+        $expectedMessageResult = new Client\Struct\Pay\GetVirtualCardDetails($requestOptions);
+
+        $sessionHandlerMock
+            ->expects($this->once())
+            ->method('sendMessage')
+            ->with('PAY_GetVirtualCardDetails', $expectedMessageResult, ['endSession' => false, 'returnXml' => true])
+            ->willReturn($mockedSendResult);
+
+        $sessionHandlerMock
+            ->expects($this->once())
+            ->method('getMessagesAndVersions')
+            ->willReturn(self::getPayWsdlMessagesAndVersions());
+
+        $responseHandlerMock = $this->createMock(ResponseHandlerInterface::class);
+
+        $responseHandlerMock
+            ->expects($this->once())
+            ->method('analyzeResponse')
+            ->with($mockedSendResult, 'PAY_GetVirtualCardDetails')
+            ->willReturn($messageResult);
+
+        $params = new Params();
+        $params->sessionHandler = $sessionHandlerMock;
+        $params->requestCreatorParams = new Params\RequestCreatorParams([
+            'receivedFrom' => 'some RF string',
+            'originatorOfficeId' => 'BRUXXXXXX',
+        ]);
+        $params->responseHandler = $responseHandlerMock;
+
+        $client = new Client($params);
+
+        $response = $client->payGetVirtualCardDetails($requestOptions);
+
+        self::assertEquals($messageResult, $response);
+    }
+
+    public function testCanSendPayDeleteVirtualCard(): void
+    {
+        $sessionHandlerMock = $this->createMock(HandlerInterface::class);
+
+        $mockedSendResult = new Client\Session\Handler\SendResult();
+        $mockedSendResult->responseXml = $this->getTestFile('PayDeleteVirtualCardReply.xml');
+
+        $messageResult = new Client\Result($mockedSendResult);
+
+        $requestOptions = new Client\RequestOptions\PayDeleteVirtualCardOptions([
+            'amadeusReference' => '222245PE',
+            'externalReference' => '0RAAbaOZgJ2ePy4eo0K5g1Hfa',
+        ]);
+
+        $expectedMessageResult = new Client\Struct\Pay\DeleteVirtualCard($requestOptions);
+
+        $sessionHandlerMock
+            ->expects($this->once())
+            ->method('sendMessage')
+            ->with('PAY_DeleteVirtualCard', $expectedMessageResult, ['endSession' => false, 'returnXml' => true])
+            ->willReturn($mockedSendResult);
+
+        $sessionHandlerMock
+            ->expects($this->once())
+            ->method('getMessagesAndVersions')
+            ->willReturn(self::getPayWsdlMessagesAndVersions());
+
+        $responseHandlerMock = $this->createMock(ResponseHandlerInterface::class);
+
+        $responseHandlerMock
+            ->expects($this->once())
+            ->method('analyzeResponse')
+            ->with($mockedSendResult, 'PAY_DeleteVirtualCard')
+            ->willReturn($messageResult);
+
+        $params = new Params();
+        $params->sessionHandler = $sessionHandlerMock;
+        $params->requestCreatorParams = new Params\RequestCreatorParams([
+            'receivedFrom' => 'some RF string',
+            'originatorOfficeId' => 'BRUXXXXXX',
+        ]);
+        $params->responseHandler = $responseHandlerMock;
+
+        $client = new Client($params);
+
+        $response = $client->payDeleteVirtualCard($requestOptions);
+
+        self::assertEquals($messageResult, $response);
+    }
+
     public function testCanFareGetFareRules()
     {
-        $mockSessionHandler = $this->getMockBuilder('Amadeus\Client\Session\Handler\HandlerInterface')->getMock();
+        $mockSessionHandler = $this->createMock('Amadeus\Client\Session\Handler\HandlerInterface');
 
         $mockedSendResult = new Client\Session\Handler\SendResult();
         $mockedSendResult->responseXml = 'dummyfaregetfarerulesmessage';
@@ -3818,7 +4600,7 @@ class ClientTest extends BaseTestCase
             ->method('getMessagesAndVersions')
             ->will($this->returnValue(['Fare_GetFareRules' => ['version' => "10.1", 'wsdl' => 'dc22e4ee']]));
 
-        $mockResponseHandler = $this->getMockBuilder('Amadeus\Client\ResponseHandler\ResponseHandlerInterface')->getMock();
+        $mockResponseHandler = $this->createMock('Amadeus\Client\ResponseHandler\ResponseHandlerInterface');
 
         $mockResponseHandler
             ->expects($this->once())
@@ -3850,9 +4632,66 @@ class ClientTest extends BaseTestCase
         $this->assertEquals($messageResult, $response);
     }
 
+    public function testFareTLAGetFareRules()
+    {
+        $mockSessionHandler = $this->createMock('Amadeus\Client\Session\Handler\HandlerInterface');
+
+        $mockedSendResult = new Client\Session\Handler\SendResult();
+        $mockedSendResult->responseXml = $this->getTestFile('fareTLAGetFareRulesResponse.txt');
+
+        $messageResult = new Client\Result($mockedSendResult);
+
+        $expectedMessageResult = new Client\Struct\Fare\TLAGetFareRules(
+            new Client\RequestOptions\FareTLAGetFareRulesOptions([
+                'airlineCode'   => 'NB',
+                'tariffClassId' => 'OB'
+            ])
+        );
+
+        $mockSessionHandler
+            ->expects($this->once())
+            ->method('sendMessage')
+            ->with('Fare_TLAGetFareRules', $expectedMessageResult, ['endSession' => false, 'returnXml' => true])
+            ->will($this->returnValue($mockedSendResult));
+        $mockSessionHandler
+            ->expects($this->never())
+            ->method('getLastResponse');
+        $mockSessionHandler
+            ->expects($this->once())
+            ->method('getMessagesAndVersions')
+            ->will($this->returnValue(['Fare_TLAGetFareRules' => ['version' => '10.1', 'wsdl' => 'dc22e4ee']]));
+
+        $mockResponseHandler = $this->getMockBuilder('Amadeus\Client\ResponseHandler\ResponseHandlerInterface')->getMock();
+
+        $mockResponseHandler
+            ->expects($this->once())
+            ->method('analyzeResponse')
+            ->with($mockedSendResult, 'Fare_TLAGetFareRules')
+            ->will($this->returnValue($messageResult));
+
+        $par = new Params();
+        $par->sessionHandler = $mockSessionHandler;
+        $par->requestCreatorParams = new Params\RequestCreatorParams([
+            'receivedFrom'       => 'some RF string',
+            'originatorOfficeId' => 'BRUXXXXXX'
+        ]);
+        $par->responseHandler = $mockResponseHandler;
+
+        $client = new Client($par);
+
+        $response = $client->fareTLAGetFareRules(
+            new Client\RequestOptions\FareTLAGetFareRulesOptions([
+                'airlineCode'   => 'NB',
+                'tariffClassId' => 'OB'
+            ])
+        );
+
+        $this->assertEquals($messageResult, $response);
+    }
+
     public function testCanFareCheckRules()
     {
-        $mockSessionHandler = $this->getMockBuilder('Amadeus\Client\Session\Handler\HandlerInterface')->getMock();
+        $mockSessionHandler = $this->createMock('Amadeus\Client\Session\Handler\HandlerInterface');
 
         $mockedSendResult = new Client\Session\Handler\SendResult();
         $mockedSendResult->responseXml = 'dummyfarecheckrulesmessage';
@@ -3878,7 +4717,7 @@ class ClientTest extends BaseTestCase
             ->method('getMessagesAndVersions')
             ->will($this->returnValue(['Fare_CheckRules' => ['version' => "7.1", 'wsdl' => 'dc22e4ee']]));
 
-        $mockResponseHandler = $this->getMockBuilder('Amadeus\Client\ResponseHandler\ResponseHandlerInterface')->getMock();
+        $mockResponseHandler = $this->createMock('Amadeus\Client\ResponseHandler\ResponseHandlerInterface');
 
         $mockResponseHandler
             ->expects($this->once())
@@ -3907,7 +4746,7 @@ class ClientTest extends BaseTestCase
 
     public function testCanFareConvertCurrency()
     {
-        $mockSessionHandler = $this->getMockBuilder('Amadeus\Client\Session\Handler\HandlerInterface')->getMock();
+        $mockSessionHandler = $this->createMock('Amadeus\Client\Session\Handler\HandlerInterface');
 
         $mockedSendResult = new Client\Session\Handler\SendResult();
         $mockedSendResult->responseXml = 'dummyfareconvertcurrencymessage';
@@ -3936,7 +4775,7 @@ class ClientTest extends BaseTestCase
             ->method('getMessagesAndVersions')
             ->will($this->returnValue(['Fare_ConvertCurrency' => ['version' => "8.1", 'wsdl' => 'dc22e4ee']]));
 
-        $mockResponseHandler = $this->getMockBuilder('Amadeus\Client\ResponseHandler\ResponseHandlerInterface')->getMock();
+        $mockResponseHandler = $this->createMock('Amadeus\Client\ResponseHandler\ResponseHandlerInterface');
 
         $mockResponseHandler
             ->expects($this->once())
@@ -3968,7 +4807,7 @@ class ClientTest extends BaseTestCase
 
     public function testCanFarePricePnrWithBookingClassVersion12()
     {
-        $mockSessionHandler = $this->getMockBuilder('Amadeus\Client\Session\Handler\HandlerInterface')->getMock();
+        $mockSessionHandler = $this->createMock('Amadeus\Client\Session\Handler\HandlerInterface');
 
         $mockedSendResult = new Client\Session\Handler\SendResult();
         $mockedSendResult->responseXml = 'dummyfarepricepnrwithbookingclassmessage';
@@ -3994,7 +4833,7 @@ class ClientTest extends BaseTestCase
             ->method('getMessagesAndVersions')
             ->will($this->returnValue(['Fare_PricePNRWithBookingClass' => ['version' => "12.3", 'wsdl' => 'dc22e4ee']]));
 
-        $mockResponseHandler = $this->getMockBuilder('Amadeus\Client\ResponseHandler\ResponseHandlerInterface')->getMock();
+        $mockResponseHandler = $this->createMock('Amadeus\Client\ResponseHandler\ResponseHandlerInterface');
 
         $mockResponseHandler
             ->expects($this->once())
@@ -4023,7 +4862,7 @@ class ClientTest extends BaseTestCase
 
     public function testCanFarePricePnrWithBookingClassVersion14()
     {
-        $mockSessionHandler = $this->getMockBuilder('Amadeus\Client\Session\Handler\HandlerInterface')->getMock();
+        $mockSessionHandler = $this->createMock('Amadeus\Client\Session\Handler\HandlerInterface');
 
         $mockedSendResult = new Client\Session\Handler\SendResult();
         $mockedSendResult->responseXml = $this->getTestFile('farePricePnrWithBookingClassReply14.txt');
@@ -4070,7 +4909,7 @@ class ClientTest extends BaseTestCase
 
     public function testCanFarePricePnrWithLowerFares14()
     {
-        $mockSessionHandler = $this->getMockBuilder('Amadeus\Client\Session\Handler\HandlerInterface')->getMock();
+        $mockSessionHandler = $this->createMock('Amadeus\Client\Session\Handler\HandlerInterface');
 
         $mockedSendResult = new Client\Session\Handler\SendResult();
         $mockedSendResult->responseXml = $this->getTestFile('farePricePnrWithLowerFaresReply14.txt');
@@ -4116,7 +4955,7 @@ class ClientTest extends BaseTestCase
 
     public function testCanFarePricePnrWithLowerFaresVersion12()
     {
-        $mockSessionHandler = $this->getMockBuilder('Amadeus\Client\Session\Handler\HandlerInterface')->getMock();
+        $mockSessionHandler = $this->createMock('Amadeus\Client\Session\Handler\HandlerInterface');
 
         $mockedSendResult = new Client\Session\Handler\SendResult();
         $mockedSendResult->responseXml = 'dummyfarepricepnrwithlowerfaresv12message';
@@ -4142,7 +4981,7 @@ class ClientTest extends BaseTestCase
             ->method('getMessagesAndVersions')
             ->will($this->returnValue(['Fare_PricePNRWithLowerFares' => ['version' => "12.4", 'wsdl' => 'dc22e4ee']]));
 
-        $mockResponseHandler = $this->getMockBuilder('Amadeus\Client\ResponseHandler\ResponseHandlerInterface')->getMock();
+        $mockResponseHandler = $this->createMock('Amadeus\Client\ResponseHandler\ResponseHandlerInterface');
 
         $mockResponseHandler
             ->expects($this->once())
@@ -4171,7 +5010,7 @@ class ClientTest extends BaseTestCase
 
     public function testCanFarePricePnrWithLowestFare14()
     {
-        $mockSessionHandler = $this->getMockBuilder('Amadeus\Client\Session\Handler\HandlerInterface')->getMock();
+        $mockSessionHandler = $this->createMock('Amadeus\Client\Session\Handler\HandlerInterface');
 
         $mockedSendResult = new Client\Session\Handler\SendResult();
         $mockedSendResult->responseXml = $this->getTestFile('farePricePnrWithLowestFareReply14.txt');
@@ -4217,7 +5056,7 @@ class ClientTest extends BaseTestCase
 
     public function testCanFarePricePnrWithLowestFareVersion12()
     {
-        $mockSessionHandler = $this->getMockBuilder('Amadeus\Client\Session\Handler\HandlerInterface')->getMock();
+        $mockSessionHandler = $this->createMock('Amadeus\Client\Session\Handler\HandlerInterface');
 
         $mockedSendResult = new Client\Session\Handler\SendResult();
         $mockedSendResult->responseXml = 'dummyfarepricepnrwithlowestfarev12message';
@@ -4243,7 +5082,7 @@ class ClientTest extends BaseTestCase
             ->method('getMessagesAndVersions')
             ->will($this->returnValue(['Fare_PricePNRWithLowestFare' => ['version' => "12.4", 'wsdl' => 'dc22e4ee']]));
 
-        $mockResponseHandler = $this->getMockBuilder('Amadeus\Client\ResponseHandler\ResponseHandlerInterface')->getMock();
+        $mockResponseHandler = $this->createMock('Amadeus\Client\ResponseHandler\ResponseHandlerInterface');
 
         $mockResponseHandler
             ->expects($this->once())
@@ -4272,7 +5111,7 @@ class ClientTest extends BaseTestCase
 
     public function testCanFareInformativePricingWithoutPnrVersion14()
     {
-        $mockSessionHandler = $this->getMockBuilder('Amadeus\Client\Session\Handler\HandlerInterface')->getMock();
+        $mockSessionHandler = $this->createMock('Amadeus\Client\Session\Handler\HandlerInterface');
 
         $mockedSendResult = new Client\Session\Handler\SendResult();
         $mockedSendResult->responseXml = $this->getTestFile('fareInformativePricingWithoutPnrReply14.txt');
@@ -4317,7 +5156,7 @@ class ClientTest extends BaseTestCase
 
     public function testCanFareInformativeBestPricingWithoutPnrVersion15()
     {
-        $mockSessionHandler = $this->getMockBuilder('Amadeus\Client\Session\Handler\HandlerInterface')->getMock();
+        $mockSessionHandler = $this->createMock('Amadeus\Client\Session\Handler\HandlerInterface');
 
         $mockedSendResult = new Client\Session\Handler\SendResult();
         $mockedSendResult->responseXml = $this->getTestFile('fareInformativeBestPricingWithoutPnrReply14.txt');
@@ -4362,7 +5201,7 @@ class ClientTest extends BaseTestCase
 
     public function testCanFarePriceUpsellWithoutPnrVersion18()
     {
-        $mockSessionHandler = $this->getMockBuilder('Amadeus\Client\Session\Handler\HandlerInterface')->getMock();
+        $mockSessionHandler = $this->createMock('Amadeus\Client\Session\Handler\HandlerInterface');
 
         $mockedSendResult = new Client\Session\Handler\SendResult();
         $mockedSendResult->responseXml = $this->getTestFile('farePriceUpsellWithoutPnrReply18.txt');
@@ -4405,7 +5244,7 @@ class ClientTest extends BaseTestCase
 
     public function testCanFareGetFamilyDescriptionVersion18()
     {
-        $mockSessionHandler = $this->getMockBuilder('Amadeus\Client\Session\Handler\HandlerInterface')->getMock();
+        $mockSessionHandler = $this->createMock('Amadeus\Client\Session\Handler\HandlerInterface');
 
         $mockedSendResult = new Client\Session\Handler\SendResult();
         $mockedSendResult->responseXml = $this->getTestFile('fareGetFareFamilyDescriptionReply18.txt');
@@ -4447,7 +5286,7 @@ class ClientTest extends BaseTestCase
 
     public function testCanSendServiceIntegratedPricing()
     {
-        $mockSessionHandler = $this->getMockBuilder('Amadeus\Client\Session\Handler\HandlerInterface')->getMock();
+        $mockSessionHandler = $this->createMock('Amadeus\Client\Session\Handler\HandlerInterface');
 
         $mockedSendResult = new Client\Session\Handler\SendResult();
         $mockedSendResult->responseXml = $this->getTestFile('serviceIntegratedPricingReply151.txt');
@@ -4492,7 +5331,7 @@ class ClientTest extends BaseTestCase
 
     public function testCanSendServiceIntegratedCatalogue()
     {
-        $mockSessionHandler = $this->getMockBuilder('Amadeus\Client\Session\Handler\HandlerInterface')->getMock();
+        $mockSessionHandler = $this->createMock('Amadeus\Client\Session\Handler\HandlerInterface');
 
         $mockedSendResult = new Client\Session\Handler\SendResult();
         $mockedSendResult->responseXml = $this->getTestFile('serviceIntegratedCatalogueReply142.txt');
@@ -4535,9 +5374,53 @@ class ClientTest extends BaseTestCase
         $this->assertEquals($messageResult, $response);
     }
 
+    public function testCanSendServiceBookPriceProduct()
+    {
+        $mockSessionHandler = $this->createMock('Amadeus\Client\Session\Handler\HandlerInterface');
+
+        $mockedSendResult = new Client\Session\Handler\SendResult();
+        $mockedSendResult->responseXml = $this->getTestFile('serviceBookPriceProductReply.txt');
+
+        $messageResult = new Client\Result($mockedSendResult);
+
+        $opts = new Client\RequestOptions\ServiceBookPriceProductOptions([
+            'recommendations' => [new Client\RequestOptions\Service\BookPriceProduct\Recommendation([
+                'id' => '14',
+                'customerRefIds' => [1, 2]
+            ])]
+        ]);
+        $expectedMessageResult = new Client\Struct\Service\BookPriceProduct($opts);
+
+        $mockSessionHandler
+            ->expects($this->once())
+            ->method('sendMessage')
+            ->with('Service_BookPriceProduct', $expectedMessageResult, ['endSession' => false, 'returnXml' => true])
+            ->will($this->returnValue($mockedSendResult));;
+        $mockSessionHandler
+            ->expects($this->never())
+            ->method('getLastResponse');
+        $mockSessionHandler
+            ->expects($this->once())
+            ->method('getMessagesAndVersions')
+            ->will($this->returnValue(['Service_BookPriceProduct' => ['version' => '1.0', 'wsdl' => 'dc22e4ee']]));
+
+        $par = new Params();
+        $par->sessionHandler = $mockSessionHandler;
+        $par->requestCreatorParams = new Params\RequestCreatorParams([
+            'receivedFrom' => 'some RF string',
+            'originatorOfficeId' => 'BRUXXXXXX'
+        ]);
+
+        $client = new Client($par);
+
+        $response = $client->serviceBookPriceProduct($opts);
+
+        $this->assertEquals($messageResult, $response);
+    }
+
     public function testCanSendServiceBookPriceService()
     {
-        $mockSessionHandler = $this->getMockBuilder('Amadeus\Client\Session\Handler\HandlerInterface')->getMock();
+        $mockSessionHandler = $this->createMock('Amadeus\Client\Session\Handler\HandlerInterface');
 
         $mockedSendResult = new Client\Session\Handler\SendResult();
         $mockedSendResult->responseXml = $this->getTestFile('serviceBookPriceServiceReply.txt');
@@ -4589,7 +5472,7 @@ class ClientTest extends BaseTestCase
 
     public function testCanSendServiceStandaloneCatalogue()
     {
-        $mockSessionHandler = $this->getMockBuilder('Amadeus\Client\Session\Handler\HandlerInterface')->getMock();
+        $mockSessionHandler = $this->createMock('Amadeus\Client\Session\Handler\HandlerInterface');
 
         $mockedSendResult = new Client\Session\Handler\SendResult();
         $mockedSendResult->responseXml = $this->getTestFile('serviceStandaloneCatalogueReply.txt');
@@ -4739,7 +5622,7 @@ class ClientTest extends BaseTestCase
 
     public function testCanSendFopCreateFormOfPayment()
     {
-        $mockSessionHandler = $this->getMockBuilder('Amadeus\Client\Session\Handler\HandlerInterface')->getMock();
+        $mockSessionHandler = $this->createMock('Amadeus\Client\Session\Handler\HandlerInterface');
 
         $mockedSendResult = new Client\Session\Handler\SendResult();
         $mockedSendResult->responseXml = $this->getTestFile('fopCreateForpOfPaymentReply154.txt');
@@ -4840,7 +5723,7 @@ class ClientTest extends BaseTestCase
 
         $expectedMessageResult = new Client\Struct\Security\SignOut();
 
-        $mockSessionHandler = $this->getMockBuilder('Amadeus\Client\Session\Handler\HandlerInterface')->getMock();
+        $mockSessionHandler = $this->createMock('Amadeus\Client\Session\Handler\HandlerInterface');
 
         $mockSessionHandler
             ->expects($this->once())
@@ -4855,7 +5738,7 @@ class ClientTest extends BaseTestCase
             ->method('getMessagesAndVersions')
             ->will($this->returnValue(['Security_SignOut' => ['version' => "4.1", 'wsdl' => 'dc22e4ee']]));
 
-        $mockResponseHandler = $this->getMockBuilder('Amadeus\Client\ResponseHandler\ResponseHandlerInterface')->getMock();
+        $mockResponseHandler = $this->createMock('Amadeus\Client\ResponseHandler\ResponseHandlerInterface');
 
         $mockResponseHandler
             ->expects($this->once())
@@ -4905,7 +5788,7 @@ class ClientTest extends BaseTestCase
             )
         );
 
-        $mockSessionHandler = $this->getMockBuilder('Amadeus\Client\Session\Handler\HandlerInterface')->getMock();
+        $mockSessionHandler = $this->createMock('Amadeus\Client\Session\Handler\HandlerInterface');
 
         $mockSessionHandler
             ->expects($this->once())
@@ -4920,7 +5803,7 @@ class ClientTest extends BaseTestCase
             ->method('getMessagesAndVersions')
             ->will($this->returnValue(['Security_Authenticate' => ['version' => "6.1", 'wsdl' => 'dc22e4ee']]));
 
-        $mockResponseHandler = $this->getMockBuilder('Amadeus\Client\ResponseHandler\ResponseHandlerInterface')->getMock();
+        $mockResponseHandler = $this->createMock('Amadeus\Client\ResponseHandler\ResponseHandlerInterface');
 
         $mockResponseHandler
             ->expects($this->once())
@@ -4990,13 +5873,7 @@ class ClientTest extends BaseTestCase
             )
         );
 
-        $mockSessionHandler = $this->getMock(
-            'Amadeus\Client\Session\Handler\SoapHeader2',
-            ['Security_Authenticate', 'getLastResponse', 'getMessagesAndVersions', 'sendMessage'],
-            [$sessionHandlerParams],
-            '',
-            true
-        );
+        $mockSessionHandler = $this->createMock(Client\Session\Handler\SoapHeader2::class);
 
         $mockSessionHandler
             ->expects($this->once())
@@ -5011,7 +5888,7 @@ class ClientTest extends BaseTestCase
             ->method('getMessagesAndVersions')
             ->will($this->returnValue(['Security_Authenticate' => ['version' => "6.1", 'wsdl' => 'dc22e4ee']]));
 
-        $mockResponseHandler = $this->getMockBuilder('Amadeus\Client\ResponseHandler\ResponseHandlerInterface')->getMock();
+        $mockResponseHandler = $this->createMock('Amadeus\Client\ResponseHandler\ResponseHandlerInterface');
 
         $mockResponseHandler
             ->expects($this->once())
@@ -5037,7 +5914,7 @@ class ClientTest extends BaseTestCase
 
     public function testCanSetSessionData()
     {
-        $mockSessionHandler = $this->getMockBuilder('Amadeus\Client\Session\Handler\HandlerInterface')->getMock();
+        $mockSessionHandler = $this->createMock('Amadeus\Client\Session\Handler\HandlerInterface');
 
         $dummySessionData = [
             'sessionId' => 'XFHZEKLRZHREJ',
@@ -5067,7 +5944,7 @@ class ClientTest extends BaseTestCase
 
     public function testCanGetSessionInfo()
     {
-        $mockSessionHandler = $this->getMockBuilder('Amadeus\Client\Session\Handler\HandlerInterface')->getMock();
+        $mockSessionHandler = $this->createMock('Amadeus\Client\Session\Handler\HandlerInterface');
 
         $mockedSession = [
             'sessionId' => '01ZWHV5EMT',
@@ -5096,7 +5973,8 @@ class ClientTest extends BaseTestCase
 
     public function testWillGetErrorOnInvalidSessionHandlerParams()
     {
-        $this->setExpectedException('InvalidArgumentException', 'Invalid parameters');
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Invalid parameters');
         $par = new Params();
         $par->requestCreatorParams = new Params\RequestCreatorParams([
             'receivedFrom' => 'some RF string',
@@ -5110,7 +5988,7 @@ class ClientTest extends BaseTestCase
 
     public function testCanSendDocIssuanceIssueTicket()
     {
-        $mockSessionHandler = $this->getMockBuilder('Amadeus\Client\Session\Handler\HandlerInterface')->getMock();
+        $mockSessionHandler = $this->createMock('Amadeus\Client\Session\Handler\HandlerInterface');
 
         $mockedSendResult = new Client\Session\Handler\SendResult();
         $mockedSendResult->responseXml = 'dummydocissuanceissueticketresponse';
@@ -5136,7 +6014,7 @@ class ClientTest extends BaseTestCase
             ->method('getMessagesAndVersions')
             ->will($this->returnValue(['DocIssuance_IssueTicket' => ['version' => "9.1", 'wsdl' => 'dc22e4ee']]));
 
-        $mockResponseHandler = $this->getMockBuilder('Amadeus\Client\ResponseHandler\ResponseHandlerInterface')->getMock();
+        $mockResponseHandler = $this->createMock('Amadeus\Client\ResponseHandler\ResponseHandlerInterface');
 
         $mockResponseHandler
             ->expects($this->once())
@@ -5165,7 +6043,7 @@ class ClientTest extends BaseTestCase
 
     public function testCanSendDocIssuanceIssueMiscellaneousDocuments()
     {
-        $mockSessionHandler = $this->getMockBuilder('Amadeus\Client\Session\Handler\HandlerInterface')->getMock();
+        $mockSessionHandler = $this->createMock('Amadeus\Client\Session\Handler\HandlerInterface');
 
         $mockedSendResult = new Client\Session\Handler\SendResult();
         $mockedSendResult->responseXml = 'dummydocissuanceissuemiscdocresponse';
@@ -5191,7 +6069,7 @@ class ClientTest extends BaseTestCase
             ->method('getMessagesAndVersions')
             ->will($this->returnValue(['DocIssuance_IssueMiscellaneousDocuments' => ['version' => "15.1", 'wsdl' => 'dc22e4ee']]));
 
-        $mockResponseHandler = $this->getMockBuilder('Amadeus\Client\ResponseHandler\ResponseHandlerInterface')->getMock();
+        $mockResponseHandler = $this->createMock('Amadeus\Client\ResponseHandler\ResponseHandlerInterface');
 
         $mockResponseHandler
             ->expects($this->once())
@@ -5220,7 +6098,7 @@ class ClientTest extends BaseTestCase
 
     public function testCanSendDocIssuanceIssueCombined()
     {
-        $mockSessionHandler = $this->getMockBuilder('Amadeus\Client\Session\Handler\HandlerInterface')->getMock();
+        $mockSessionHandler = $this->createMock('Amadeus\Client\Session\Handler\HandlerInterface');
 
         $mockedSendResult = new Client\Session\Handler\SendResult();
         $mockedSendResult->responseXml = 'dummydocissuanceissuecombinedresponse';
@@ -5251,7 +6129,7 @@ class ClientTest extends BaseTestCase
             ->method('getMessagesAndVersions')
             ->will($this->returnValue(['DocIssuance_IssueCombined' => ['version' => "15.1", 'wsdl' => 'dc22e4ee']]));
 
-        $mockResponseHandler = $this->getMockBuilder('Amadeus\Client\ResponseHandler\ResponseHandlerInterface')->getMock();
+        $mockResponseHandler = $this->createMock('Amadeus\Client\ResponseHandler\ResponseHandlerInterface');
 
         $mockResponseHandler
             ->expects($this->once())
@@ -5285,7 +6163,7 @@ class ClientTest extends BaseTestCase
 
     public function testCanSendDocRefundInitRefund()
     {
-        $mockSessionHandler = $this->getMockBuilder('Amadeus\Client\Session\Handler\HandlerInterface')->getMock();
+        $mockSessionHandler = $this->createMock('Amadeus\Client\Session\Handler\HandlerInterface');
 
         $mockedSendResult = new Client\Session\Handler\SendResult();
         $mockedSendResult->responseXml = 'dummydocrefundinitrefundresponse';
@@ -5314,7 +6192,7 @@ class ClientTest extends BaseTestCase
             ->method('getMessagesAndVersions')
             ->will($this->returnValue(['DocRefund_InitRefund' => ['version' => "14.1", 'wsdl' => 'dc22e4ee']]));
 
-        $mockResponseHandler = $this->getMockBuilder('Amadeus\Client\ResponseHandler\ResponseHandlerInterface')->getMock();
+        $mockResponseHandler = $this->createMock('Amadeus\Client\ResponseHandler\ResponseHandlerInterface');
 
         $mockResponseHandler
             ->expects($this->once())
@@ -5346,7 +6224,7 @@ class ClientTest extends BaseTestCase
 
     public function testCanSendDocRefundIgnoreRefund()
     {
-        $mockSessionHandler = $this->getMockBuilder('Amadeus\Client\Session\Handler\HandlerInterface')->getMock();
+        $mockSessionHandler = $this->createMock('Amadeus\Client\Session\Handler\HandlerInterface');
 
         $mockedSendResult = new Client\Session\Handler\SendResult();
         $mockedSendResult->responseXml = 'dummydocrefundignorerefundresponse';
@@ -5370,7 +6248,7 @@ class ClientTest extends BaseTestCase
             ->method('getMessagesAndVersions')
             ->will($this->returnValue(['DocRefund_IgnoreRefund' => ['version' => "14.1", 'wsdl' => 'dc22e4ee']]));
 
-        $mockResponseHandler = $this->getMockBuilder('Amadeus\Client\ResponseHandler\ResponseHandlerInterface')->getMock();
+        $mockResponseHandler = $this->createMock('Amadeus\Client\ResponseHandler\ResponseHandlerInterface');
 
         $mockResponseHandler
             ->expects($this->once())
@@ -5397,7 +6275,7 @@ class ClientTest extends BaseTestCase
 
     public function testCanSendDocRefundUpdateRefund()
     {
-        $mockSessionHandler = $this->getMockBuilder('Amadeus\Client\Session\Handler\HandlerInterface')->getMock();
+        $mockSessionHandler = $this->createMock('Amadeus\Client\Session\Handler\HandlerInterface');
 
         $mockedSendResult = new Client\Session\Handler\SendResult();
         $mockedSendResult->responseXml = 'dummydocrefundupdaterefundresponse';
@@ -5601,7 +6479,7 @@ class ClientTest extends BaseTestCase
             ->method('getMessagesAndVersions')
             ->will($this->returnValue(['DocRefund_UpdateRefund' => ['version' => "14.1", 'wsdl' => 'dc22e4ee']]));
 
-        $mockResponseHandler = $this->getMockBuilder('Amadeus\Client\ResponseHandler\ResponseHandlerInterface')->getMock();
+        $mockResponseHandler = $this->createMock('Amadeus\Client\ResponseHandler\ResponseHandlerInterface');
 
         $mockResponseHandler
             ->expects($this->once())
@@ -5808,7 +6686,7 @@ class ClientTest extends BaseTestCase
 
     public function testCanSendDocRefundProcessRefund()
     {
-        $mockSessionHandler = $this->getMockBuilder('Amadeus\Client\Session\Handler\HandlerInterface')->getMock();
+        $mockSessionHandler = $this->createMock('Amadeus\Client\Session\Handler\HandlerInterface');
 
         $mockedSendResult = new Client\Session\Handler\SendResult();
         $mockedSendResult->responseXml = 'dummydocrefundprocessrefundresponse';
@@ -5834,7 +6712,7 @@ class ClientTest extends BaseTestCase
             ->method('getMessagesAndVersions')
             ->will($this->returnValue(['DocRefund_ProcessRefund' => ['version' => "13.1", 'wsdl' => 'dc22e4ee']]));
 
-        $mockResponseHandler = $this->getMockBuilder('Amadeus\Client\ResponseHandler\ResponseHandlerInterface')->getMock();
+        $mockResponseHandler = $this->createMock('Amadeus\Client\ResponseHandler\ResponseHandlerInterface');
 
         $mockResponseHandler
             ->expects($this->once())
@@ -5863,7 +6741,7 @@ class ClientTest extends BaseTestCase
 
     public function testCanSendFopValidateFop()
     {
-        $mockSessionHandler = $this->getMockBuilder('Amadeus\Client\Session\Handler\HandlerInterface')->getMock();
+        $mockSessionHandler = $this->createMock('Amadeus\Client\Session\Handler\HandlerInterface');
 
         $mockedSendResult = new Client\Session\Handler\SendResult();
         $mockedSendResult->responseXml = 'dummyfopvalidatefopresponse';
@@ -5894,7 +6772,7 @@ class ClientTest extends BaseTestCase
             ->method('getMessagesAndVersions')
             ->will($this->returnValue(['FOP_ValidateFOP' => ['version' => "13.1", 'wsdl' => 'dc22e4ee']]));
 
-        $mockResponseHandler = $this->getMockBuilder('Amadeus\Client\ResponseHandler\ResponseHandlerInterface')->getMock();
+        $mockResponseHandler = $this->createMock('Amadeus\Client\ResponseHandler\ResponseHandlerInterface');
 
         $mockResponseHandler
             ->expects($this->once())
@@ -5928,7 +6806,7 @@ class ClientTest extends BaseTestCase
 
     public function testCanSendTicketInitRefund()
     {
-        $mockSessionHandler = $this->getMockBuilder('Amadeus\Client\Session\Handler\HandlerInterface')->getMock();
+        $mockSessionHandler = $this->createMock('Amadeus\Client\Session\Handler\HandlerInterface');
 
         $mockedSendResult = new Client\Session\Handler\SendResult();
         $mockedSendResult->responseXml = 'dummyticketinitrefundresponse';
@@ -5952,7 +6830,7 @@ class ClientTest extends BaseTestCase
             ->method('getMessagesAndVersions')
             ->will($this->returnValue(['Ticket_InitRefund' => ['version' => "14.1", 'wsdl' => 'dc22e4ee']]));
 
-        $mockResponseHandler = $this->getMockBuilder('Amadeus\Client\ResponseHandler\ResponseHandlerInterface')->getMock();
+        $mockResponseHandler = $this->createMock('Amadeus\Client\ResponseHandler\ResponseHandlerInterface');
 
         $mockResponseHandler
             ->expects($this->once())
@@ -5979,7 +6857,7 @@ class ClientTest extends BaseTestCase
 
     public function testCanSendTicketUpdateRefund()
     {
-        $mockSessionHandler = $this->getMockBuilder('Amadeus\Client\Session\Handler\HandlerInterface')->getMock();
+        $mockSessionHandler = $this->createMock('Amadeus\Client\Session\Handler\HandlerInterface');
 
         $mockedSendResult = new Client\Session\Handler\SendResult();
         $mockedSendResult->responseXml = 'dummyTicketUpdateRefundResponse';
@@ -6005,8 +6883,7 @@ class ClientTest extends BaseTestCase
             ->method('getMessagesAndVersions')
             ->willReturn(['Ticket_UpdateRefund' => ['version' => '3.0', 'wsdl' => 'dc22e4ee']]);
 
-        $mockResponseHandler = $this->getMockBuilder('Amadeus\Client\ResponseHandler\ResponseHandlerInterface')
-            ->getMock();
+        $mockResponseHandler = $this->createMock('Amadeus\Client\ResponseHandler\ResponseHandlerInterface');
 
         $mockResponseHandler
             ->expects($this->once())
@@ -6035,7 +6912,7 @@ class ClientTest extends BaseTestCase
 
     public function testCanSendTicketIgnoreRefund()
     {
-        $mockSessionHandler = $this->getMockBuilder('Amadeus\Client\Session\Handler\HandlerInterface')->getMock();
+        $mockSessionHandler = $this->createMock('Amadeus\Client\Session\Handler\HandlerInterface');
 
         $mockedSendResult = new Client\Session\Handler\SendResult();
         $mockedSendResult->responseXml = 'dummyticketignorerefundresponse';
@@ -6059,7 +6936,7 @@ class ClientTest extends BaseTestCase
             ->method('getMessagesAndVersions')
             ->will($this->returnValue(['Ticket_IgnoreRefund' => ['version' => "14.1", 'wsdl' => 'dc22e4ee']]));
 
-        $mockResponseHandler = $this->getMockBuilder('Amadeus\Client\ResponseHandler\ResponseHandlerInterface')->getMock();
+        $mockResponseHandler = $this->createMock('Amadeus\Client\ResponseHandler\ResponseHandlerInterface');
 
         $mockResponseHandler
             ->expects($this->once())
@@ -6086,7 +6963,7 @@ class ClientTest extends BaseTestCase
 
     public function testCanSendTicketProcessRefund()
     {
-        $mockSessionHandler = $this->getMockBuilder('Amadeus\Client\Session\Handler\HandlerInterface')->getMock();
+        $mockSessionHandler = $this->createMock('Amadeus\Client\Session\Handler\HandlerInterface');
 
         $mockedSendResult = new Client\Session\Handler\SendResult();
         $mockedSendResult->responseXml = 'dummyticketprocessrefundresponse';
@@ -6110,7 +6987,7 @@ class ClientTest extends BaseTestCase
             ->method('getMessagesAndVersions')
             ->will($this->returnValue(['Ticket_ProcessRefund' => ['version' => "14.1", 'wsdl' => 'dc22e4ee']]));
 
-        $mockResponseHandler = $this->getMockBuilder('Amadeus\Client\ResponseHandler\ResponseHandlerInterface')->getMock();
+        $mockResponseHandler = $this->createMock('Amadeus\Client\ResponseHandler\ResponseHandlerInterface');
 
         $mockResponseHandler
             ->expects($this->once())
@@ -6140,7 +7017,7 @@ class ClientTest extends BaseTestCase
      */
     public function testCanSendAnyMessageRequestNoResponseXml()
     {
-        $mockSessionHandler = $this->getMockBuilder('Amadeus\Client\Session\Handler\HandlerInterface')->getMock();
+        $mockSessionHandler = $this->createMock('Amadeus\Client\Session\Handler\HandlerInterface');
 
         $mockedSendResult = new Client\Session\Handler\SendResult();
         $mockedSendResult->responseObject = new \stdClass();
@@ -6174,7 +7051,7 @@ class ClientTest extends BaseTestCase
             ->method('getMessagesAndVersions')
             ->will($this->returnValue(['DocIssuance_IssueCombined' => ['version' => "15.1", 'wsdl' => 'dc22e4ee']]));
 
-        $mockResponseHandler = $this->getMockBuilder('Amadeus\Client\ResponseHandler\ResponseHandlerInterface')->getMock();
+        $mockResponseHandler = $this->createMock('Amadeus\Client\ResponseHandler\ResponseHandlerInterface');
 
         $mockResponseHandler
             ->expects($this->once())
@@ -6227,7 +7104,7 @@ class ClientTest extends BaseTestCase
 
         $expectedPnrResult = new Client\Struct\Pnr\Ignore($options);
 
-        $mockSessionHandler = $this->getMockBuilder('Amadeus\Client\Session\Handler\HandlerInterface')->getMock();
+        $mockSessionHandler = $this->createMock('Amadeus\Client\Session\Handler\HandlerInterface');
 
         $mockSessionHandler
             ->expects($this->once())
@@ -6239,7 +7116,7 @@ class ClientTest extends BaseTestCase
             ->method('getMessagesAndVersions')
             ->will($this->returnValue(['PNR_Ignore' => ['version' => "14.2", 'wsdl' => 'dc22e4ee']]));
 
-        $mockResponseHandler = $this->getMockBuilder('Amadeus\Client\ResponseHandler\ResponseHandlerInterface')->getMock();
+        $mockResponseHandler = $this->createMock('Amadeus\Client\ResponseHandler\ResponseHandlerInterface');
 
         $mockResponseHandler
             ->expects($this->once())
@@ -6340,7 +7217,7 @@ class ClientTest extends BaseTestCase
     protected function makeClientWithMockedSessionHandler()
     {
         $par = new Params();
-        $par->sessionHandler = $this->getMockBuilder('Amadeus\Client\Session\Handler\HandlerInterface')->getMock();
+        $par->sessionHandler = $this->createMock('Amadeus\Client\Session\Handler\HandlerInterface');
         $par->requestCreatorParams = new Params\RequestCreatorParams([
             'receivedFrom' => 'some RF string',
             'originatorOfficeId' => 'BRUXXXXXX'
@@ -6358,5 +7235,32 @@ class ClientTest extends BaseTestCase
             dirname(__FILE__) . DIRECTORY_SEPARATOR . "Client" .
             DIRECTORY_SEPARATOR . "testfiles" . DIRECTORY_SEPARATOR . "dummywsdl.wsdl"
         );
+    }
+
+    private static function getNdcWsdlMessagesAndVersions(): array
+    {
+        return [
+            'Travel_OfferPrice' => ['version' => '1.2', 'wsdl' => 'dc22e4ee'],
+            'Travel_OrderCancel' => ['version' => '1.0', 'wsdl' => 'dc22e4ee'],
+            'Travel_SeatAvailability' => ['version' => '1.0', 'wsdl' => 'dc22e4ee'],
+            'Travel_OrderChange' => ['version' => '1.5', 'wsdl' => 'dc22e4ee'],
+            'Travel_OrderCreate' => ['version' => '1.5', 'wsdl' => 'dc22e4ee'],
+            'Travel_OrderPay' => ['version' => '1.5', 'wsdl' => 'dc22e4ee'],
+            'Travel_OrderRetrieve' => ['version' => '1.5', 'wsdl' => 'dc22e4ee'],
+            'Travel_ServiceList' => ['version' => '1.1', 'wsdl' => 'dc22e4ee'],
+        ];
+    }
+
+    private static function getPayWsdlMessagesAndVersions(): array
+    {
+        return [
+            'PAY_CancelVirtualCardLoad' => ['version' => 'CancelVirtualCardLoadRQ.3.000', 'wsdl' => '5073cf5a'],
+            'PAY_DeleteVirtualCard' => ['version' => 'DeleteVirtualCardRQ.3.000', 'wsdl' => '5073cf5a'],
+            'PAY_GenerateVirtualCard' => ['version' => 'GenerateVirtualCardRQ.3.000', 'wsdl' => '5073cf5a'],
+            'PAY_GetVirtualCardDetails' => ['version' => 'GetVirtualCardDetailsRQ.3.000', 'wsdl' => '5073cf5a'],
+            'PAY_ListVirtualCards' => ['version' => 'ListVirtualCardsRQ.3.000', 'wsdl' => '5073cf5a'],
+            'PAY_ScheduleVirtualCardLoad' => ['version' => 'ScheduleVirtualCardLoadRQ.3.000', 'wsdl' => '5073cf5a'],
+            'PAY_UpdateVirtualCard' => ['version' => 'UpdateVirtualCardRQ.3.000', 'wsdl' => '5073cf5a'],
+        ];
     }
 }

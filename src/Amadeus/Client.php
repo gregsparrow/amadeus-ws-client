@@ -58,7 +58,7 @@ class Client extends Base
      *
      * @var string
      */
-    const VERSION = "1.11.0";
+    const VERSION = "2.3.0";
 
     /**
      * An identifier string for the library (to be used in Received From entries)
@@ -340,6 +340,23 @@ class Client extends Base
     public function pnrCancel(RequestOptions\PnrCancelOptions $options, $messageOptions = [])
     {
         $msgName = 'PNR_Cancel';
+
+        return $this->callMessage($msgName, $options, $messageOptions);
+    }
+
+    /**
+     * PNR_ChangeElement
+     *
+     * @param RequestOptions\PnrChangeElementOptions $options
+     * @param array $messageOptions (OPTIONAL)
+     * @return Result
+     * @throws Client\InvalidMessageException
+     * @throws Client\RequestCreator\MessageVersionUnsupportedException
+     * @throws Exception
+     */
+    public function pnrChangeElement(RequestOptions\PnrChangeElementOptions $options, $messageOptions = [])
+    {
+        $msgName = 'PNR_ChangeElement';
 
         return $this->callMessage($msgName, $options, $messageOptions);
     }
@@ -791,6 +808,23 @@ class Client extends Base
     public function fareGetFareRules(RequestOptions\FareGetFareRulesOptions $options, $messageOptions = [])
     {
         $msgName = 'Fare_GetFareRules';
+
+        return $this->callMessage($msgName, $options, $messageOptions);
+    }
+
+    /**
+     * Fare_TLAGetFareRules
+     *
+     * @param RequestOptions\FareTLAGetFareRulesOptions $options
+     * @param array $messageOptions (OPTIONAL)
+     * @return Result
+     * @throws Client\InvalidMessageException
+     * @throws Client\RequestCreator\MessageVersionUnsupportedException
+     * @throws Exception
+     */
+    public function fareTLAGetFareRules(RequestOptions\FareTLAGetFareRulesOptions $options, $messageOptions = [])
+    {
+        $msgName = 'Fare_TLAGetFareRules';
 
         return $this->callMessage($msgName, $options, $messageOptions);
     }
@@ -1678,6 +1712,25 @@ class Client extends Base
     }
 
     /**
+     * Service_BookPriceProduct
+     *
+     * @param RequestOptions\ServiceBookPriceProductOptions $options
+     * @param array                          $messageOptions  (OPTIONAL)
+     *
+     * @return Result
+     * @throws Client\InvalidMessageException
+     * @throws Client\RequestCreator\MessageVersionUnsupportedException
+     */
+    public function serviceBookPriceProduct(
+        RequestOptions\ServiceBookPriceProductOptions $options,
+        $messageOptions = []
+    ) {
+        $msgName = 'Service_BookPriceProduct';
+
+        return $this->callMessage($msgName, $options, $messageOptions);
+    }
+
+    /**
      * Service_BookPriceService
      *
      * @param RequestOptions\ServiceBookPriceServiceOptions $options
@@ -1745,9 +1798,223 @@ class Client extends Base
      * @throws Client\RequestCreator\MessageVersionUnsupportedException
      * @throws Exception
      */
-    public function serviceStandaloneCatalogue(RequestOptions\ServiceStandaloneCatalogueOptions $options, $messageOptions = [])
-    {
+    public function serviceStandaloneCatalogue(
+        RequestOptions\ServiceStandaloneCatalogueOptions $options,
+        $messageOptions = [],
+    ) {
         $msgName = 'Service_StandaloneCatalogue';
+
+        return $this->callMessage($msgName, $options, $messageOptions);
+    }
+
+    /**
+     * Travel_OfferPrice
+     *
+     * @param RequestOptions\TravelOfferPriceOptions $options
+     * @param array $messageOptions
+     *            (OPTIONAL)
+     * @return Result
+     * @throws Client\InvalidMessageException
+     * @throws Client\RequestCreator\MessageVersionUnsupportedException
+     * @throws Exception
+     */
+    public function travelOfferPrice(RequestOptions\TravelOfferPriceOptions $options, $messageOptions = [])
+    {
+        $msgName = 'Travel_OfferPrice';
+
+        return $this->callMessage($msgName, $options, $messageOptions);
+    }
+
+    /**
+     * Travel_OrderCreate
+     *
+     * @param RequestOptions\TravelOrderCreateOptions $options
+     * @param array $messageOptions
+     *            (OPTIONAL)
+     * @return Result
+     * @throws Client\InvalidMessageException
+     * @throws Client\RequestCreator\MessageVersionUnsupportedException
+     * @throws Exception
+     */
+    public function travelOrderCreate(RequestOptions\TravelOrderCreateOptions $options, $messageOptions = [])
+    {
+        $msgName = 'Travel_OrderCreate';
+
+        return $this->callMessage($msgName, $options, $messageOptions);
+    }
+
+    /**
+     * Travel_OrderRetrieve
+     *
+     * @param RequestOptions\TravelOrderRetrieveOptions $options
+     * @param array $messageOptions
+     *            (OPTIONAL)
+     * @return Result
+     * @throws Client\InvalidMessageException
+     * @throws Client\RequestCreator\MessageVersionUnsupportedException
+     * @throws Exception
+     */
+    public function travelOrderRetrieve(RequestOptions\TravelOrderRetrieveOptions $options, $messageOptions = [])
+    {
+        $msgName = 'Travel_OrderRetrieve';
+
+        return $this->callMessage($msgName, $options, $messageOptions);
+    }
+
+    /**
+     * Travel_OrderPay
+     *
+     * @param RequestOptions\TravelOrderPayOptions $options
+     * @param array $messageOptions
+     *            (OPTIONAL)
+     * @return Result
+     * @throws Client\InvalidMessageException
+     * @throws Client\RequestCreator\MessageVersionUnsupportedException
+     * @throws Exception
+     */
+    public function travelOrderPay(RequestOptions\TravelOrderPayOptions $options, $messageOptions = [])
+    {
+        $msgName = 'Travel_OrderPay';
+
+        return $this->callMessage($msgName, $options, $messageOptions);
+    }
+
+    /**
+     * Travel_OrderPay
+     *
+     * @param RequestOptions\TravelOrderCancelOptions $options
+     * @param array $messageOptions
+     *            (OPTIONAL)
+     * @return Result
+     * @throws Client\InvalidMessageException
+     * @throws Client\RequestCreator\MessageVersionUnsupportedException
+     * @throws Exception
+     */
+    public function travelOrderCancel(RequestOptions\TravelOrderCancelOptions $options, $messageOptions = [])
+    {
+        $msgName = 'Travel_OrderCancel';
+
+        return $this->callMessage($msgName, $options, $messageOptions);
+    }
+
+    /**
+     * Travel_ServiceList
+     *
+     * @param RequestOptions\TravelServiceListOptions $options
+     * @param array $messageOptions
+     *            (OPTIONAL)
+     * @return Result
+     * @throws Client\InvalidMessageException
+     * @throws Client\RequestCreator\MessageVersionUnsupportedException
+     * @throws Exception
+     */
+    public function travelServiceList(RequestOptions\TravelServiceListOptions $options, $messageOptions = [])
+    {
+        $msgName = 'Travel_ServiceList';
+
+        return $this->callMessage($msgName, $options, $messageOptions);
+    }
+
+    /**
+     * Travel_SeatAvailability
+     *
+     * @param RequestOptions\TravelSeatAvailabilityOptions $options
+     * @param array $messageOptions
+     *            (OPTIONAL)
+     * @return Result
+     * @throws Client\InvalidMessageException
+     * @throws Client\RequestCreator\MessageVersionUnsupportedException
+     * @throws Exception
+     */
+    public function travelSeatAvailability(RequestOptions\TravelSeatAvailabilityOptions $options, $messageOptions = [])
+    {
+        $msgName = 'Travel_SeatAvailability';
+
+        return $this->callMessage($msgName, $options, $messageOptions);
+    }
+
+    /**
+     * Travel_OrderChange
+     *
+     * @param RequestOptions\TravelOrderChangeOptions $options
+     * @param array $messageOptions
+     *            (OPTIONAL)
+     * @return Result
+     * @throws Client\InvalidMessageException
+     * @throws Client\RequestCreator\MessageVersionUnsupportedException
+     * @throws Exception
+     */
+    public function travelOrderChange(RequestOptions\TravelOrderChangeOptions $options, $messageOptions = [])
+    {
+        $msgName = 'Travel_OrderChange';
+
+        return $this->callMessage($msgName, $options, $messageOptions);
+    }
+
+    /**
+     * PAY_GetVirtualCardDetails
+     *
+     * @param RequestOptions\PayGetVirtualCardDetailsOptions $options
+     * @param array                                          $messageOptions (OPTIONAL)
+     * @return Result
+     * @throws Client\InvalidMessageException
+     * @throws Client\RequestCreator\MessageVersionUnsupportedException
+     * @throws Exception
+     */
+    public function payGetVirtualCardDetails(RequestOptions\PayGetVirtualCardDetailsOptions $options, $messageOptions = [])
+    {
+        $msgName = 'PAY_GetVirtualCardDetails';
+
+        return $this->callMessage($msgName, $options, $messageOptions);
+    }
+
+    /**
+     * PAY_ListVirtualCards
+     *
+     * @param RequestOptions\PayListVirtualCardsOptions $options
+     * @param array                                     $messageOptions (OPTIONAL)
+     * @return Result
+     * @throws Client\InvalidMessageException
+     * @throws Client\RequestCreator\MessageVersionUnsupportedException
+     * @throws Exception
+     */
+    public function payListVirtualCards(RequestOptions\PayListVirtualCardsOptions $options, $messageOptions = [])
+    {
+        $msgName = 'PAY_ListVirtualCards';
+
+        return $this->callMessage($msgName, $options, $messageOptions);
+    }
+
+    /**
+     * PAY_GenerateVirtualCard
+     *
+     * @param RequestOptions\PayGenerateVirtualCardOptions $options
+     * @param array                                        $messageOptions (OPTIONAL)
+     * @return Result
+     * @throws Client\InvalidMessageException
+     * @throws Client\RequestCreator\MessageVersionUnsupportedException
+     * @throws Exception
+     */
+    public function payGenerateVirtualCard(RequestOptions\PayGenerateVirtualCardOptions $options, $messageOptions = [])
+    {
+        $msgName = 'PAY_GenerateVirtualCard';
+
+        return $this->callMessage($msgName, $options, $messageOptions);
+    }
+
+    /**
+     * PAY_DeleteVirtualCard
+     *
+     * @param RequestOptions\PayDeleteVirtualCardOptions $options
+     * @param array                                      $messageOptions (OPTIONAL)
+     * @return Result
+     * @throws Client\InvalidMessageException
+     * @throws Client\RequestCreator\MessageVersionUnsupportedException
+     * @throws Exception
+     */
+    public function payDeleteVirtualCard(RequestOptions\PayDeleteVirtualCardOptions $options, $messageOptions = [])
+    {
+        $msgName = 'PAY_DeleteVirtualCard';
 
         return $this->callMessage($msgName, $options, $messageOptions);
     }

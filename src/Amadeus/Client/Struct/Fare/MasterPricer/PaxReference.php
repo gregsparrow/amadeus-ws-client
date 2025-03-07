@@ -46,11 +46,19 @@ class PaxReference
     /**
      * @param int $mainTravellerRef
      * @param boolean $isInfant (OPTIONAL)
-     * @param string|null $passengerType (OPTIONAL)
+     * @param string|string[]|null $passengerType (OPTIONAL)
      */
     public function __construct($mainTravellerRef, $isInfant = false, $passengerType = null)
     {
         $this->traveller[] = new Traveller($mainTravellerRef, $isInfant);
-        $this->ptc[] = $passengerType;
+        if (is_array($passengerType)) {
+            $types = $passengerType;
+        } else {
+            $types = [$passengerType];
+        }
+
+        foreach ($types as $type) {
+            $this->ptc[] = $type;
+        }
     }
 }

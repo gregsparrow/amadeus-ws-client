@@ -78,7 +78,7 @@ class MasterPricerExpertSearchTest extends BaseTestCase
 
         $message = new MasterPricerExpertSearch($opt);
 
-        $this->assertInternalType('array', $message->itinerary);
+        $this->assertIsArray($message->itinerary);
         $this->assertCount(1, $message->itinerary);
         $this->assertInstanceOf('Amadeus\Client\Struct\Fare\MasterPricer\Itinerary', $message->itinerary[0]);
         $this->assertInstanceOf('Amadeus\Client\Struct\Fare\MasterPricer\TimeDetails', $message->itinerary[0]->timeDetails);
@@ -592,7 +592,7 @@ class MasterPricerExpertSearchTest extends BaseTestCase
 
         $message = new MasterPricerExpertSearch($opt);
 
-        $this->assertInternalType('array', $message->itinerary);
+        $this->assertIsArray($message->itinerary);
         $this->assertEquals(1, count($message->itinerary));
         $this->assertInstanceOf('Amadeus\Client\Struct\Fare\MasterPricer\Itinerary', $message->itinerary[0]);
         $this->assertInstanceOf('Amadeus\Client\Struct\Fare\MasterPricer\TimeDetails', $message->itinerary[0]->timeDetails);
@@ -644,7 +644,7 @@ class MasterPricerExpertSearchTest extends BaseTestCase
 
         $message = new MasterPricerExpertSearch($opt);
 
-        $this->assertInternalType('array', $message->itinerary);
+        $this->assertIsArray($message->itinerary);
         $this->assertEquals(1, count($message->itinerary));
         $this->assertInstanceOf('Amadeus\Client\Struct\Fare\MasterPricer\Itinerary', $message->itinerary[0]);
         $this->assertInstanceOf('Amadeus\Client\Struct\Fare\MasterPricer\TimeDetails', $message->itinerary[0]->timeDetails);
@@ -686,7 +686,7 @@ class MasterPricerExpertSearchTest extends BaseTestCase
 
         $message = new MasterPricerExpertSearch($opt);
 
-        $this->assertInternalType('array', $message->itinerary);
+        $this->assertIsArray($message->itinerary);
         $this->assertEquals(1, count($message->itinerary));
         $this->assertInstanceOf('Amadeus\Client\Struct\Fare\MasterPricer\Itinerary', $message->itinerary[0]);
         $this->assertInstanceOf('Amadeus\Client\Struct\Fare\MasterPricer\TimeDetails', $message->itinerary[0]->timeDetails);
@@ -1556,7 +1556,7 @@ class MasterPricerExpertSearchTest extends BaseTestCase
 
         $this->assertCount(1, $msg->itinerary[0]->flightInfo->companyIdentity);
         $this->assertEquals(CompanyIdentity::QUAL_EXCLUDED, $msg->itinerary[0]->flightInfo->companyIdentity[0]->carrierQualifier);
-        $this->assertInternalType('array', $msg->itinerary[0]->flightInfo->companyIdentity[0]->carrierId);
+        $this->assertIsArray($msg->itinerary[0]->flightInfo->companyIdentity[0]->carrierId);
         $this->assertCount(1, $msg->itinerary[0]->flightInfo->companyIdentity[0]->carrierId);
         $this->assertEquals('AA', $msg->itinerary[0]->flightInfo->companyIdentity[0]->carrierId[0]);
 
@@ -1568,7 +1568,7 @@ class MasterPricerExpertSearchTest extends BaseTestCase
 
         $this->assertCount(1, $msg->itinerary[1]->flightInfo->companyIdentity);
         $this->assertEquals(CompanyIdentity::QUAL_PREFERRED, $msg->itinerary[1]->flightInfo->companyIdentity[0]->carrierQualifier);
-        $this->assertInternalType('array', $msg->itinerary[1]->flightInfo->companyIdentity[0]->carrierId);
+        $this->assertIsArray($msg->itinerary[1]->flightInfo->companyIdentity[0]->carrierId);
         $this->assertCount(1, $msg->itinerary[1]->flightInfo->companyIdentity[0]->carrierId);
         $this->assertEquals('BA', $msg->itinerary[1]->flightInfo->companyIdentity[0]->carrierId[0]);
 
@@ -1632,7 +1632,7 @@ class MasterPricerExpertSearchTest extends BaseTestCase
 
         $this->assertNull($msg->itinerary[0]->flightInfo);
 
-        $this->assertInternalType('array', $msg->itinerary[1]->flightInfo->flightDetail->flightType);
+        $this->assertIsArray($msg->itinerary[1]->flightInfo->flightDetail->flightType);
         $this->assertCount(1, $msg->itinerary[1]->flightInfo->flightDetail->flightType);
         $this->assertEquals(FlightDetail::FLIGHT_TYPE_DIRECT, $msg->itinerary[1]->flightInfo->flightDetail->flightType[0]);
 
@@ -1683,6 +1683,7 @@ class MasterPricerExpertSearchTest extends BaseTestCase
             'count' => 1
         ]);
         $opt->itinerary[] = new MPItinerary([
+            'segmentReference' => 1,
             'departureLocation' => new MPLocation(['city' => 'BRU']),
             'arrivalLocation' => new MPLocation(['city' => 'LON']),
             'date' => new MPDate(['dateTime' => new \DateTime('2017-01-15T00:00:00+0000', new \DateTimeZone('UTC'))]),

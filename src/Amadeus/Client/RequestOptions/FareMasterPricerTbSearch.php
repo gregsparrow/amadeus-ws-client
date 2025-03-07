@@ -22,8 +22,6 @@
 
 namespace Amadeus\Client\RequestOptions;
 
-use Amadeus\Client\RequestOptions\FareMasterPricerExSearchOptions as FareMasterPricerExSearchOptions;
-
 /**
  * Request Options for Fare_MasterPricerTravelboardSearch
  *
@@ -32,7 +30,6 @@ use Amadeus\Client\RequestOptions\FareMasterPricerExSearchOptions as FareMasterP
  */
 class FareMasterPricerTbSearch extends FareMasterPricerExSearchOptions
 {
-
     /**
      * Set to true to disallow connecting flight to change airports within a city.
      *
@@ -41,7 +38,8 @@ class FareMasterPricerTbSearch extends FareMasterPricerExSearchOptions
     public $noAirportChange = false;
 
     /**
-     * Specify a maximum elapsed flying time (EFT): This is a percentage of the shortest EFT returned by the journey server
+     * Specify a maximum elapsed flying time (EFT):
+     * This is a percentage of the shortest EFT returned by the journey server
      *
      * @var int
      */

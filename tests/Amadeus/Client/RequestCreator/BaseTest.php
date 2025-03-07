@@ -22,8 +22,10 @@
 
 namespace Test\Amadeus\Client\RequestCreator;
 
+use Amadeus\Client\InvalidMessageException;
 use Amadeus\Client\Params\RequestCreatorParams;
 use Amadeus\Client\RequestCreator\Base;
+use Amadeus\Client\RequestCreator\MessageVersionUnsupportedException;
 use Amadeus\Client\RequestOptions\Air\MultiAvailability\RequestOptions;
 use Amadeus\Client\RequestOptions\AirMultiAvailabilityOptions;
 use Amadeus\Client\RequestOptions\Fare\InformativePricing\PricingOptions;
@@ -43,6 +45,9 @@ use Amadeus\Client\RequestOptions\PnrRetrieveAndDisplayOptions;
 use Amadeus\Client\RequestOptions\PnrRetrieveOptions;
 use Amadeus\Client\RequestOptions\Queue;
 use Amadeus\Client\RequestOptions\QueueListOptions;
+use Amadeus\Client\RequestOptions\Service\BookPriceProduct\Recommendation;
+use Amadeus\Client\RequestOptions\ServiceBookPriceProductOptions;
+use Amadeus\Client\Struct\Fare\InformativeBestPricingWithoutPNR13;
 use Amadeus\Client\Struct\Offer\Reference;
 use Amadeus\Client\Struct\Offer\Verify;
 use Amadeus\Client\Struct\Pnr\Retrieve;
@@ -61,10 +66,8 @@ class BaseTest extends BaseTestCase
 {
     public function testUnknownMessageWillThrowRuntimeException()
     {
-        $this->setExpectedException(
-            '\RuntimeException',
-            'No builder found for message Fare_DisplayCurrencyIATARates'
-        );
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage('No builder found for message Fare_DisplayCurrencyIATARates');
 
         $par = new RequestCreatorParams([
             'originatorOfficeId' => 'BRUXXXXXX',
@@ -82,10 +85,8 @@ class BaseTest extends BaseTestCase
 
     public function testMessageNotInWsdlWillThrowInvalidMessageException()
     {
-        $this->setExpectedException(
-            '\Amadeus\Client\InvalidMessageException',
-            'not in WDSL'
-        );
+        $this->expectException(InvalidMessageException::class);
+        $this->expectExceptionMessage('not in WDSL');
 
         $par = new RequestCreatorParams([
             'originatorOfficeId' => 'BRUXXXXXX',
@@ -97,7 +98,7 @@ class BaseTest extends BaseTestCase
 
         $rq->createRequest(
             'Fare_DisplayFaresForCityPair',
-            $this->getMockBuilder('Amadeus\Client\RequestOptions\RequestOptionsInterface')->getMock()
+            $this->createMock('Amadeus\Client\RequestOptions\RequestOptionsInterface'),
         );
     }
 
@@ -237,7 +238,7 @@ class BaseTest extends BaseTestCase
         $this->assertEquals(SubQueueInfoDetails::IDTYPE_CATEGORY, $message->categoryDetails->subQueueInfoDetails->identificationType);
         $this->assertInstanceOf('Amadeus\Client\Struct\Queue\SortCriteria', $message->sortCriteria);
         $this->assertInstanceOf('Amadeus\Client\Struct\Queue\Dumbo', $message->sortCriteria->dumbo);
-        $this->assertInternalType('array', $message->sortCriteria->sortOption);
+        $this->assertIsArray($message->sortCriteria->sortOption);
         $this->assertInstanceOf('Amadeus\Client\Struct\Queue\SortOption', $message->sortCriteria->sortOption[0]);
         $this->assertInstanceOf('Amadeus\Client\Struct\Queue\SelectionDetails', $message->sortCriteria->sortOption[0]->selectionDetails);
         $this->assertEquals(SelectionDetails::LIST_OPTION_SORT_CREATION, $message->sortCriteria->sortOption[0]->selectionDetails->option);
@@ -245,7 +246,7 @@ class BaseTest extends BaseTestCase
 
     public function testCanCreateFareInformativePricingMessageV12()
     {
-        $this->setExpectedException('Amadeus\Client\RequestCreator\MessageVersionUnsupportedException');
+        $this->expectException(MessageVersionUnsupportedException::class);
 
         $par = new RequestCreatorParams([
             'originatorOfficeId' => 'BRUXXXXXX',
@@ -265,7 +266,7 @@ class BaseTest extends BaseTestCase
 
     public function testCanCreateFareInformativeBestPricingMessageV12()
     {
-        $this->setExpectedException('Amadeus\Client\RequestCreator\MessageVersionUnsupportedException');
+        $this->expectException(MessageVersionUnsupportedException::class);
 
         $par = new RequestCreatorParams([
             'originatorOfficeId' => 'BRUXXXXXX',
@@ -416,7 +417,7 @@ class BaseTest extends BaseTestCase
 
         $this->assertInstanceOf('\Amadeus\Client\Struct\Fop\CreateFormOfPayment\GroupUsage14', $message->fopGroup[0]->mopDescription[0]->paymentModule->groupUsage);
         $this->assertInstanceOf('\Amadeus\Client\Struct\Fop\AttributeDetails', $message->fopGroup[0]->mopDescription[0]->paymentModule->groupUsage->attributeDetails);
-        $this->assertInternalType('string', $message->fopGroup[0]->mopDescription[0]->paymentModule->groupUsage->attributeDetails->attributeType);
+        $this->assertIsString($message->fopGroup[0]->mopDescription[0]->paymentModule->groupUsage->attributeDetails->attributeType);
     }
 
     public function testCanTryBuildingSameMessageTwiceWillReuseBuilder()
@@ -441,7 +442,7 @@ class BaseTest extends BaseTestCase
             ])
         );
 
-        $rq->createRequest(
+        $result = $rq->createRequest(
             'Fare_InformativeBestPricingWithoutPNR',
             new FareInformativeBestPricingWithoutPnrOptions([
                 'pricingOptions' => new PricingOptions([
@@ -453,5 +454,38 @@ class BaseTest extends BaseTestCase
                 ])
             ])
         );
+
+        self::assertInstanceOf(InformativeBestPricingWithoutPNR13::class, $result);
     }
+
+    public function testCanCreateServiceBookPriceProductMessage()
+    {
+        $par = new RequestCreatorParams([
+            'originatorOfficeId' => 'BRUXXXXXX',
+            'receivedFrom' => 'some RF string',
+            'messagesAndVersions' => ['Service_BookPriceProduct' => ['version' => '1.0', 'wsdl' => 'aabbccdd']]
+        ]);
+
+        $rq = new Base($par);
+
+        $message = $rq->createRequest(
+            'Service_BookPriceProduct',
+            new ServiceBookPriceProductOptions(
+                [
+                    'version' => '1.1',
+                    'recommendations' => [
+                        new Recommendation(['id' => '14', 'customerRefIds' => [0, 1]])
+                    ]
+                ]
+            )
+        );
+
+        $this->assertInstanceOf('Amadeus\Client\Struct\Service\BookPriceProduct', $message);
+        /** @var RetrieveAndDisplay $message */
+        $this->assertEquals('1.1', $message->Version);
+        $this->assertInstanceOf('Amadeus\Client\Struct\Service\BookPriceProduct\Recommendation', $message->Recommendation[0]);
+        $this->assertEquals('14', $message->Recommendation[0]->RecoID);
+        $this->assertEquals([0, 1], $message->Recommendation[0]->CustomerRefIds);
+    }
+
 }

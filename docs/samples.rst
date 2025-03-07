@@ -289,6 +289,44 @@ Remove passenger with passenger reference 2 from the PNR:
         ])
     );
 
+
+-----------------
+PNR_ChangeElement
+-----------------
+
+Modification for the AP element at line 5:
+
+.. code-block:: php
+
+    use Amadeus\Client\RequestOptions\PnrChangeElementOptions;
+
+    $changeElementReply = $client->pnrChangeElement(new PnrChangeElementOptions([
+        'entry' => '5/modified ap',
+    ]);
+
+
+Passenger association modification for the TK element at line 6:
+
+.. code-block:: php
+
+    use Amadeus\Client\RequestOptions\PnrChangeElementOptions;
+
+    $changeElementReply = $client->pnrChangeElement(new PnrChangeElementOptions([
+        'entry' => '6/P2',
+    ]);
+
+Segment status code modification from HK to HX for the segment at line 3:
+
+.. code-block:: php
+
+    use Amadeus\Client\RequestOptions\PnrChangeElementOptions;
+
+    $changeElementReply = $client->pnrChangeElement(new PnrChangeElementOptions([
+        'entry' => '3/HX',
+    ]);
+
+See more examples on Amadeus developers portal at PNR Change element -> User guide
+
 ------------------
 PNR_DisplayHistory
 ------------------
@@ -918,6 +956,66 @@ An example of pricing, with options listed below:
         ])
     );
 
+An example of pricing, with options listed below:
+
+- take published fares into account (RP)
+- take Unifares into account (RU)
+- Search only in the original cabin (the one from the segment)
+
+.. code-block:: php
+
+    use Amadeus\Client\RequestOptions\FarePricePnrWithLowerFaresOptions;
+    use Amadeus\Client\RequestOptions\Fare\PricePnr\PaxSegRef;
+    use Amadeus\Client\RequestOptions\Fare\PricePnr\Cabin;
+
+    $pricingResponse = $client->farePricePnrWithLowerFares(
+        new FarePricePnrWithLowerFaresOptions([
+            'overrideOptions' => [
+                FarePricePnrWithLowerFaresOptions::OVERRIDE_FARETYPE_PUB,
+                FarePricePnrWithLowerFaresOptions::OVERRIDE_FARETYPE_UNI
+            ],
+            'cabins' => [
+                new Cabin([
+                    'cabinType' => Cabin::CABIN_TYPE_ORIGINAL_CABIN
+                ])
+            ]
+        ])
+    );
+
+An example of pricing, with options listed below:
+
+- take published fares into account (RP)
+- take Unifares into account (RU)
+- Search in cabin F first, then in cabin C and finally in any cabin
+
+.. code-block:: php
+
+    use Amadeus\Client\RequestOptions\FarePricePnrWithLowerFaresOptions;
+    use Amadeus\Client\RequestOptions\Fare\PricePnr\PaxSegRef;
+    use Amadeus\Client\RequestOptions\Fare\PricePnr\Cabin;
+
+    $pricingResponse = $client->farePricePnrWithLowerFares(
+        new FarePricePnrWithLowerFaresOptions([
+            'overrideOptions' => [
+                FarePricePnrWithLowerFaresOptions::OVERRIDE_FARETYPE_PUB,
+                FarePricePnrWithLowerFaresOptions::OVERRIDE_FARETYPE_UNI
+            ],
+            'cabins' => [
+                new Cabin([
+                    'cabinType' => Cabin::CABIN_TYPE_FIRST,
+                    'cabinCode'  => 'F'
+                ]),
+                new Cabin([
+                    'cabinType' => Cabin::CABIN_TYPE_SECOND,
+                    'cabinCode'  => 'C'
+                ]),
+                new Cabin([
+                    'cabinType' => Cabin::CABIN_TYPE_ANY_CABIN
+                ])
+            ]
+        ])
+    );
+
 `More examples of Pricing messages <samples/pricepnr.rst>`_
 
 ---------------------------
@@ -1236,9 +1334,9 @@ Get fare rules providing corporate number and departure date:
         ])
     );
 
------------------
+-----------------------------
 Fare_GetFareFamilyDescription
------------------
+-----------------------------
 
 Basic request to get Fare Families in stateful mode (after pricing):
 
@@ -1257,6 +1355,50 @@ Basic request to get Fare Families in stateful mode (after pricing):
             ]
         ])
     );
+
+Requesting an Airline Fare Family (AFF) description in standalone mode:
+
+.. code-block:: php
+
+    use Amadeus\Client\RequestOptions\FareGetFareFamilyDescriptionOptions;
+    use Amadeus\Client\RequestOptions\Fare\GetFareFamilyDescription;
+
+    $fareFamiliesResponse = $client->fareGetFareFamilyDescription(
+        new FareGetFareFamilyDescriptionOptions([
+            'bookingDateInformation' => new \DateTime('2021-10-08'),
+            'standaloneDescriptionRequest' => new GetFareFamilyDescription\StandaloneDescriptionRequest([
+                'items' => [
+                    new GetFareFamilyDescription\StandaloneDescriptionRequestOption([
+                        'fareInfo' => new GetFareFamilyDescription\FareInfo([
+                            'fareQualifier' => 'FF',
+                            'rateCategory' => 'BASICECON',
+                        ]),
+                        'itineraryInfo' => new GetFareFamilyDescription\ItineraryInfo([
+                            'origin' => 'JFK',
+                            'destination' => 'DUB',
+                        ]),
+                        'carrierInfo' => new GetFareFamilyDescription\CarrierInfo([
+                            'airline' => 'DL',
+                        ]),
+                    ]),
+                    new GetFareFamilyDescription\StandaloneDescriptionRequestOption([
+                        'fareInfo' => new GetFareFamilyDescription\FareInfo([
+                            'fareQualifier' => 'FF',
+                            'rateCategory' => 'BASIC',
+                        ]),
+                        'itineraryInfo' => new GetFareFamilyDescription\ItineraryInfo([
+                            'origin' => 'MIA',
+                            'destination' => 'AUA',
+                        ]),
+                        'carrierInfo' => new GetFareFamilyDescription\CarrierInfo([
+                            'airline' => 'AA',
+                        ]),
+                    ]),
+                ],
+            ]),
+        ]),
+    );
+
 
 --------------------
 Fare_ConvertCurrency
@@ -1290,6 +1432,23 @@ Convert 200 Euro to US Dollars in the exchange rate of 25th December 2015 *(this
             'amount' => '200',
             'date' => \DateTime::createFromFormat('Y-m-d', '2015-12-25', new \DateTimeZone('UTC')),
             'rateOfConversion' => FareConvertCurrencyOptions::RATE_TYPE_BANKERS_SELLER_RATE
+        ])
+    );
+
+--------------------
+Fare_TLAGetFareRules
+--------------------
+
+Get fare rules for TLA carriers:
+
+.. code-block:: php
+
+    use Amadeus\Client\RequestOptions\FareTLAGetFareRulesOptions;
+
+    $rulesResponse = $client->fareTLAGetFareRules(
+        new FareTLAGetFareRulesOptions([
+            'airlineCode' => '2U',
+            'tariffClassId' => 'OB'
         ])
     );
 
@@ -3473,6 +3632,32 @@ Service_StandaloneCatalogue
 );
 
 ------------------------
+Service_BookPriceProduct
+------------------------
+
+Book ancillary with service reference 14 for pax with reference 2 and 3.
+
+You'll get the service references from the ``Service_IntegratedCatalogue`` response.
+
+.. code-block:: php
+
+    use Amadeus\Client\RequestOptions\Service\BookPriceProduct\Recommendation;
+    use Amadeus\Client\RequestOptions\ServiceBookPriceProductOptions;
+
+    $bookPriceProductResult = $client->serviceBookPriceProduct(
+        new ServiceBookPriceProductOptions([
+            'recommendations' => [
+                new Recommendation(
+                    [
+                        'id'             => 14,
+                        'customerRefIds' => [2, 3]
+                    ]
+                )
+            ]
+        ])
+    );
+
+------------------------
 Service_BookPriceService
 ------------------------
 
@@ -4041,4 +4226,14 @@ that 'salesIndicator' option here named as 'documentInfo' and request doesn't ha
 
     $salesReportResult = $client->salesReportsDisplayQueryReport($opt);
 
+************
+NDC (Travel)
+************
 
+`See examples for NDC services <samples/ndc.rst>`_
+
+***
+PAY
+***
+
+`See examples for PAY services <samples/pay.rst>`_
